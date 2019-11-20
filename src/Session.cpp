@@ -15,6 +15,7 @@ Session::Session(const string& configFilePath){
     json contentJson;
     i >> contentJson;
     int j = 0;
+    // json
     for (json::iterator it = contentJson.begin(); it != contentJson.end(); ++it) {
         //std::cout << it.key() << " : " << it.value() << "\n";
         cout << it.value()[0]["length"] << endl;
