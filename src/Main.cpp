@@ -3,6 +3,8 @@
 using namespace std;
 
 int main(int argc, char** argv){
+
+    cout << "test";
 	if(argc!=2)
 	{
 		cout << "usage splflix input_file" << endl;
