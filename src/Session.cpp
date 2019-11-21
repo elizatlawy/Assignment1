@@ -25,11 +25,11 @@ Session::Session(const string& configFilePath){
 // copy constructor
 Session::Session(const Session &other) {
 
-    for(auto& currContent : other.content)
-        content.push_back(new Movie(currContent);
-    for(auto& currActionLog : other.actionsLog)
-        actionsLog.push_back(currActionLog);
-    // need to complete userMap + activeUser.
+//    for(auto& currContent : other.content)
+//        content.push_back(new Movie(currContent);
+//    for(auto& currActionLog : other.actionsLog)
+//        actionsLog.push_back(currActionLog);
+//    // need to complete userMap + activeUser.
 
 
 }
@@ -84,8 +84,9 @@ void Session::insertSeries(json &jsonFile) {
     }
 }
 
-    Session::~Session()
-    {
+    Session::~Session(){
+
+
     }
 
     void Session::start() {

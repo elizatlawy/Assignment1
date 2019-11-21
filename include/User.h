@@ -1,6 +1,7 @@
 #ifndef USER_H_
 #define USER_H_
 
+#include "Watchable.h"
 #include <vector>
 #include <string>
 #include <unordered_set>
