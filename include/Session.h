@@ -28,6 +28,9 @@ public:
 
     User *getActiveUser() const;
 
+    const std::string &getLastUserInput() const;
+    void addUser (User &toAddUser);
+
 private:
     std::vector<Watchable*> content;
     std::vector<BaseAction*> actionsLog;
@@ -35,5 +38,6 @@ private:
     User* activeUser;
     void insertMovies (json &jsonFile);
     void insertSeries (json &jsonFile);
+    std::string lastUserInput;
 };
 #endif
