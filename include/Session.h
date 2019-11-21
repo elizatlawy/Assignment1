@@ -6,6 +6,7 @@
 #include <string>
 #include "Action.h"
 
+
 class User;
 class Watchable;
 

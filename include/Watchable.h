@@ -1,3 +1,4 @@
+
 #ifndef WATCHABLE_H_
 #define WATCHABLE_H_
 
@@ -14,6 +15,13 @@ public:
     virtual ~Watchable();
     virtual std::string toString() const = 0;
     virtual Watchable* getNextWatchable(Session&) const = 0;
+
+    const long getId() const;
+
+    int getLength() const;
+
+    const std::vector<std::string> &getTags() const;
+
 private:
     const long id;
     int length;
@@ -43,5 +51,5 @@ private:
     int episode;
     long nextEpisodeId;
 };
-
 #endif
+
