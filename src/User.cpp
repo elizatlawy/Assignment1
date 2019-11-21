@@ -12,7 +12,9 @@ using namespace std;
 User::User(const string& name) : name(name){
     history = {nullptr};
 }
-Watchable* User::getRecommendation(Session &s) {}
+Watchable* User::getRecommendation(Session &s) {
+
+}
 string User::getName() const {}
 vector<Watchable*> User::get_history() const {}
 
@@ -22,7 +24,11 @@ vector<Watchable*> User::get_history() const {}
 
 LengthRecommenderUser::LengthRecommenderUser(const string& name) : User(name){}
 
-Watchable* LengthRecommenderUser::getRecommendation(Session &s) {}
+Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
+
+    double avrLenOfHistory;
+
+}
 
 /*
  * RerunRecommenderUser

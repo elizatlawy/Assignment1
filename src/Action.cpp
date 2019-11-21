@@ -21,7 +21,9 @@ string BaseAction::getErrorMsg() const {}
  */
 
 std::string CreateUser::toString() const {}
-void CreateUser::act(Session &sess) {}
+void CreateUser::act(Session &sess) {
+
+}
 
 
 /*

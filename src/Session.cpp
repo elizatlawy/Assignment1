@@ -5,20 +5,51 @@
 #include <vector>
 #include <fstream>
 
+
 using namespace std;
 using json = nlohmann::json;
 
+// constructor
 Session::Session(const string& configFilePath){
     // construct content file
     ifstream i(configFilePath);
     json jsonFile = json::parse(i);
     insertMovies(jsonFile);
     insertSeries(jsonFile);
-
-
-
+    actionsLog = {nullptr};
+    activeUser = new LengthRecommenderUser("default");
+    userMap.insert(make_pair("default",activeUser));
 
 } // end of sessions constructor
+
+// copy constructor
+Session::Session(const Session &other) {
+
+    for(auto& currContent : other.content)
+        content.push_back(new Movie(currContent);
+    for(auto& currActionLog : other.actionsLog)
+        actionsLog.push_back(currActionLog);
+    // need to complete userMap + activeUser.
+
+
+}
+
+// Getters
+const vector<Watchable *> &Session::getContent() const {
+    return content;
+}
+
+const vector<BaseAction *> &Session::getActionsLog() const {
+    return actionsLog;
+}
+
+const unordered_map<std::string, User *> &Session::getUserMap() const {
+    return userMap;
+}
+
+User *Session::getActiveUser() const {
+    return activeUser;
+}
 
 
 // inserts all movies form the Json file
@@ -59,9 +90,9 @@ void Session::insertSeries(json &jsonFile) {
 
     void Session::start() {
         cout << "SPLFLIX is now on!" << endl;
-        for(auto& x : content){
-            cout << x->toString() << endl;
-        }
+//        for(auto& x : content){
+//            cout << x->toString() << endl;
+//        }
     }
 
 

@@ -24,6 +24,7 @@ protected:
 private:
 	std::string errorMsg;
 	ActionStatus status;
+	string
 };
 
 class CreateUser  : public BaseAction {

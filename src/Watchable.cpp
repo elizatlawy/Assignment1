@@ -8,10 +8,13 @@ using namespace std;
  *  ####################### Watchable ########################
  */
 
+// Constructors
 Watchable::Watchable(long id, int length, const vector<string> &tags) : id(id), length(length), tags(tags) {}
-//std::string Watchable::toString() const {}
+std::string Watchable::toString() const {}
 Watchable* Watchable::getNextWatchable(Session &) const {}
 Watchable::~Watchable() {}
+
+// Getters
 
 const long Watchable::getId() const {
     return id;
@@ -28,6 +31,12 @@ const vector<std::string> &Watchable::getTags() const {
  */
 
 Movie::Movie(long id, const string& name, int length, const vector<string>& tags) :  Watchable(id, length, tags), name(name) {}
+// copy constructor
+Movie::Movie(const Movie &other) :  Watchable(other.getId(), other.getLength(), other.getTags()), name(other.getName()) {}
+
+const string &Movie::getName() const {
+    return name;
+}
 
 string Movie::toString() const {
     string tagsString = "";
