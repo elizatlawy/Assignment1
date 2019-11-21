@@ -11,6 +11,8 @@ int main(int argc, char** argv){
 //    cout << Mov->toString() << endl;
 //    cout << "test";
 
+
+
 	if(argc!=2)
 	{
 		cout << "usage splflix input_file" << endl;

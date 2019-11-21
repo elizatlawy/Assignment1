@@ -49,6 +49,31 @@ string Movie::toString() const {
     return output;
 } //
 
+// relation operands
+bool Watchable::operator<(const Watchable &rhs) const {
+    return length < rhs.length;
+}
+
+bool Watchable::operator>(const Watchable &rhs) const {
+    return rhs < *this;
+}
+
+bool Watchable::operator<=(const Watchable &rhs) const {
+    return !(rhs < *this);
+}
+
+bool Watchable::operator>=(const Watchable &rhs) const {
+    return !(*this < rhs);
+}
+
+bool Watchable::operator==(const Watchable &rhs) const {
+    return id == rhs.id;
+}
+
+bool Watchable::operator!=(const Watchable &rhs) const {
+    return !(rhs == *this);
+}
+
 Watchable* Movie::getNextWatchable(Session &) const {}
 
 /*

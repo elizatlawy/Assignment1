@@ -1,6 +1,4 @@
-//
-// Created by zatlawy@wincs.cs.bgu.ac.il on 20/11/2019.
-//
+
 #include "../include/Action.h"
 #include <vector>
 using namespace std;
