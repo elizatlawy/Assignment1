@@ -5,11 +5,11 @@
 using namespace std;
 
 int main(int argc, char** argv){
-    vector<string> tags {"Fantasy","Drama"};
-    long l = 1;
-    Movie *Mov = new Movie(l, "my movie", 60, tags);
-    cout << Mov->toString() << endl;
-    cout << "test";
+//    vector<string> tags {"Fantasy","Drama"};
+//    long l = 1;
+//    Movie *Mov = new Movie(l, "my movie", 60, tags);
+//    cout << Mov->toString() << endl;
+//    cout << "test";
 
 	if(argc!=2)
 	{

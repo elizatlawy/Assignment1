@@ -1,6 +1,4 @@
-//
-// Created by zatlawy@wincs.cs.bgu.ac.il on 20/11/2019.
-//
+
 #include "../include/Watchable.h"
 #include <vector>
 #include <iterator>
@@ -26,22 +24,64 @@ const vector<std::string> &Watchable::getTags() const {
 }
 
 /*
- * Movie
+ *  ####################### Movie  #######################
  */
 
 Movie::Movie(long id, const string& name, int length, const vector<string>& tags) :  Watchable(id, length, tags), name(name) {}
+
 string Movie::toString() const {
     string tagsString = "";
-    for(auto& tag: getTags())
-        tagsString = tagsString + tag + ", ";
-    string output = to_string(getId()) + ". " + name + " " + to_string(getLength()) + " minutes [" + tagsString + "]";
+    string separator;
+    for(auto& tag: getTags()){
+        tagsString = tagsString + separator + tag;
+        separator = ", ";
+    }
+    string output = to_string(getId()+1) + ". " + name + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
     return output;
-}
+} //
+
 Watchable* Movie::getNextWatchable(Session &) const {}
 
 /*
- * Episode
+ *  ####################### Episode  #######################
  */
-Episode::Episode(long id, const string& name, int length, int season, int episode, const vector<string>& tags ) : Watchable(id, length, tags), season(season), episode(episode){};
-string Episode::toString() const {}
+Episode::Episode(long id, const string& seriesName, int length, int season, int episode, const vector<string>& tags ) : Watchable(id, length, tags), seriesName(seriesName), season(season), episode(episode){};
+
+const string &Episode::getSeriesName() const {
+    return seriesName;
+}
+
+int Episode::getSeason() const {
+    return season;
+}
+
+int Episode::getEpisode() const {
+    return episode;
+}
+
+long Episode::getNextEpisodeId() const {
+    return nextEpisodeId;
+}
+
+string Episode::toString() const {
+    string tagsString = "";
+    string separator;
+    for(auto& tag: getTags()){
+        tagsString = tagsString + separator + tag;
+        separator = ", ";
+    }
+    string printSeason = to_string(season);
+    string printEpisode = to_string(episode);
+    if (season < 10)
+        printSeason = "0" + printSeason;
+    if(episode < 10)
+        printEpisode = "0" + printEpisode;
+    string output = to_string(getId()+1) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
+    return output;
+
+}
+
+
 Watchable* Episode::getNextWatchable(Session &) const {}
+
+// end of Episode class

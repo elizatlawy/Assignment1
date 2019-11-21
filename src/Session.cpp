@@ -4,7 +4,6 @@
 #include "../include/User.h"
 #include "../include/Watchable.h"
 #include "../include/Session.h"
-#include "../include/json.hpp"
 #include <vector>
 #include <fstream>
 
@@ -12,40 +11,58 @@ using namespace std;
 using json = nlohmann::json;
 
 Session::Session(const string& configFilePath){
+    // construct content file
     ifstream i(configFilePath);
-    json Jsonfile;
-    i >> Jsonfile;
-    json moviesJson = Jsonfile["movies"];
-    int id = 0;
-    // inserts all movies form the Json file
+    json jsonFile = json::parse(i);
+    insertMovies(jsonFile);
+    insertTVseries(jsonFile);
+
+
+} // end of sessions constructor
+
+
+// inserts all movies form the Json file
+void Session::insertMovies(json &jsonFile) {
+    json moviesJson = jsonFile["movies"];
+    int id = content.size();
     for (auto& currMovie : moviesJson.items()) {
-        nlohmann::json movie = currMovie.value();
+        json movie = currMovie.value();
         Movie *newMovie = new Movie(id, movie["name"], movie["length"], movie["tags"]);
         content.push_back(newMovie);
         id++;
     }
-    // inserts all series form the Json file
-        json seriesJson = Jsonfile["series"];
+}
+
+// inserts all series form the Json file
+void Session::insertTVseries(json &jsonFile) {
+    json seriesJson = jsonFile["tv_series"];
+    int id = content.size();
+    for (auto &currSerie : seriesJson.items()) {
         int seasonNumber = 1;
-        for (auto& currSerie : seriesJson.items()) {
-            nlohmann::json serie = currSerie.value();
-            vector<int> seasons = serie["seasons]"];
-            for (int seasonEpisodesNumber : seasons){
-                for (int episodeNumber = 1; episodeNumber <= seasonEpisodesNumber; episodeNumber++){
-                    Episode* newEpisode = new Episode(id, serie["name"], serie["episode_length"],seasonNumber,episodeNumber,serie["tags"]);
-                    content.push_back(newEpisode);
-                    id++;
-                }
+        json serie = currSerie.value();
+        vector<int> seasons = serie["seasons"];
+        for (int seasonEpisodesNumber : seasons) { // for each season
+            for (int episodeNumber = 1; episodeNumber <= seasonEpisodesNumber; episodeNumber++) { // for each episode
+                Episode *newEpisode = new Episode(id, serie["name"], serie["episode_length"], seasonNumber,
+                                                  episodeNumber, serie["tags"]);
+                content.push_back(newEpisode);
+                id++;
             }
             seasonNumber++;
+        }
+    }
+}
+
+    Session::~Session()
+    {
     }
 
-} // end of sessions constructor
+    void Session::start() {
+        cout << "SPLFLIX is now on!" << endl;
+        for(auto& x : content){
+            cout << x->toString() << endl;
+        }
+    }
 
-Session::~Session() {}
-
-void Session::start() {
-    cout << "SPLFLIX is now on!";
-}
 
 
