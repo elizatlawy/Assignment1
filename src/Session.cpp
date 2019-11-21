@@ -1,6 +1,4 @@
-//
-// Created by zatlawy@wincs.cs.bgu.ac.il on 20/11/2019.
-//
+
 #include "../include/User.h"
 #include "../include/Watchable.h"
 #include "../include/Session.h"
@@ -15,7 +13,9 @@ Session::Session(const string& configFilePath){
     ifstream i(configFilePath);
     json jsonFile = json::parse(i);
     insertMovies(jsonFile);
-    insertTVseries(jsonFile);
+    insertSeries(jsonFile);
+
+
 
 
 } // end of sessions constructor
@@ -34,7 +34,7 @@ void Session::insertMovies(json &jsonFile) {
 }
 
 // inserts all series form the Json file
-void Session::insertTVseries(json &jsonFile) {
+void Session::insertSeries(json &jsonFile) {
     json seriesJson = jsonFile["tv_series"];
     int id = content.size();
     for (auto &currSerie : seriesJson.items()) {

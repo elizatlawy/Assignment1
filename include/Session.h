@@ -23,6 +23,6 @@ private:
     std::unordered_map<std::string,User*> userMap;
     User* activeUser;
     void insertMovies (json &jsonFile);
-    void insertTVseries (json &jsonFile);
+    void insertSeries (json &jsonFile);
 };
 #endif
