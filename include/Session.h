@@ -30,6 +30,7 @@ public:
 
     const std::string &getLastUserInput() const;
     void addUser (User &toAddUser);
+    void addActionLog (BaseAction* newAction);
 
 private:
     std::vector<Watchable*> content;

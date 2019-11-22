@@ -10,58 +10,73 @@ using namespace std;
  * BaseAction
  */
 
+// Constructors
 ActionStatus BaseAction::getStatus() const {}
-void BaseAction::act(Session &sess) {}
+void BaseAction::act(Session &sess) {
+    status = PENDING;
+}
+
 string BaseAction::toString() const {}
-void BaseAction::complete() {}
-void BaseAction::error(const std::string &errorMsg) {}
-string BaseAction::getErrorMsg() const {}
 
-void BaseAction::setErrorMsg(const string &errorMsg) {
+// protected functions
+void BaseAction::complete() {
+    status = COMPLETED;
+}
+void BaseAction::error(const std::string &errorMsg) {
+    status = ERROR;
     BaseAction::errorMsg = errorMsg;
-}
 
-void BaseAction::setStatus(ActionStatus status) {
-    BaseAction::status = status;
 }
+string BaseAction::getErrorMsg() const {}
 
 /*
  * CreateUser
  */
 
-std::string CreateUser::toString() const {}
+std::string CreateUser::toString() const {
+    string output = "CreateUser";
+    if(getStatus() == ERROR){
+        output = output + "ERROR: " + getErrorMsg();
+    }
+    // status = COMPLETED
+    else{
+        output = output + "COMPLETED";
+    }
+}
 void CreateUser::act(Session &sess) {
     string tmpUserInput = sess.getLastUserInput();
     string userName = tmpUserInput.substr(tmpUserInput.find(" "+1),tmpUserInput.find(" "));
     string algoName = tmpUserInput.substr(tmpUserInput.length()-3);
 
-    if((sess.getUserMap().find(userName) != sess.getUserMap().end() ) & (algoName == "len" | algoName == "rer" | algoName == "gen" )){
-        if(algoName == "len"){
-            LengthRecommenderUser *toAddUser = new LengthRecommenderUser(userName);
-            sess.addUser(*toAddUser);
+    // user is not exist in UserMap
+    if(sess.getUserMap().find(userName) == sess.getUserMap().end()){
+        if(algoName == "len" | algoName == "rer" | algoName == "gen"){
+            if(algoName == "len"){
+                LengthRecommenderUser *toAddUser = new LengthRecommenderUser(userName);
+                sess.addUser(*toAddUser);
+            }
+            if(algoName == "rer"){
+                RerunRecommenderUser *toAddUser = new RerunRecommenderUser(userName);
+                sess.addUser(*toAddUser);
+            }
+            if(algoName == "gen"){
+                GenreRecommenderUser *toAddUser = new GenreRecommenderUser(userName);
+                sess.addUser(*toAddUser);
+            }
+           complete();
         }
-        if(algoName == "rer"){
-            RerunRecommenderUser *toAddUser = new RerunRecommenderUser(userName);
-            sess.addUser(*toAddUser);
+        // algo is incorrect
+        else{
+            error("invalid recommendation algorithm");
         }
-        if(algoName == "gen"){
-            GenreRecommenderUser *toAddUser = new GenreRecommenderUser(userName);
-            sess.addUser(*toAddUser);
-        }
-        setStatus(COMPLETED);
-
-    }
+    } // user already exist
     else{
-        setStatus(ERROR);
-        // check what about PENDING?
-
-
+        error("the new user name is already taken");
     }
-
+    // add the action to the actions log
+    sess.addActionLog(this);
 
 } // end of CreateUser
-
-
 
 
 /*
