@@ -10,19 +10,19 @@ int main(int argc, char** argv){
 //    Movie *Mov = new Movie(l, "my movie", 60, tags);
 //    cout << Mov->toString() << endl;
 //    cout << "test";
-vector <int> v {1,2,3};
-    if (std::find(v.begin(), v.end(), 4) == v.end())
-        cout << "enter to if";
-    else
-        cout << " not enter to if";
 
+    string input = "createuser Martsiano gen";
+    string userName = input.substr(input.find(" ")+1,input.find(" "));
+    string algoName = input.substr(input.length()-3);
+    cout << userName << endl;
+    cout << algoName << endl;
 
-	if(argc!=2)
-	{
-		cout << "usage splflix input_file" << endl;
-		return 0;
-	}
-	Session s(argv[1]);
-	s.start();
-	return 0;
+//	if(argc!=2)
+//	{
+//		cout << "usage splflix input_file" << endl;
+//		return 0;
+//	}
+//	Session s(argv[1]);
+//	s.start();
+//	return 0;
 }

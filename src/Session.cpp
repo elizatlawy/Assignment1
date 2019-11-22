@@ -2,7 +2,7 @@
 #include "../include/User.h"
 #include "../include/Watchable.h"
 #include "../include/Session.h"
-#include <vector>
+#include "../include/Action.h"
 #include <fstream>
 
 
@@ -29,7 +29,7 @@ Session::Session(const Session &other) {
 //        content.push_back(new Movie(currContent);
 //    for(auto& currActionLog : other.actionsLog)
 //        actionsLog.push_back(currActionLog);
-//    // need to complete userMap + activeUser.
+    // need to complete userMap + activeUser.
 
 
 }
@@ -51,6 +51,27 @@ User *Session::getActiveUser() const {
     return activeUser;
 }
 
+const string &Session::getLastUserInput() const {
+    return lastUserInput;
+}
+
+
+
+Session::~Session()
+{
+}
+
+void Session::start() {
+    cout << "SPLFLIX is now on!" << endl;
+//        while (lastUserInput != "exit"){
+//            // all action options
+//        }
+}
+
+
+void Session::addUser(User &toAddUser) {
+    userMap.insert(make_pair(toAddUser.getName(),&toAddUser));
+}
 
 // inserts all movies form the Json file
 void Session::insertMovies(json &jsonFile) {
@@ -83,18 +104,6 @@ void Session::insertSeries(json &jsonFile) {
         }
     }
 }
-
-    Session::~Session(){
-
-
-    }
-
-    void Session::start() {
-        cout << "SPLFLIX is now on!" << endl;
-//        for(auto& x : content){
-//            cout << x->toString() << endl;
-//        }
-    }
 
 
 
