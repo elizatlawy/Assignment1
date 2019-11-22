@@ -55,6 +55,7 @@ const string &Session::getLastUserInput() const {
     return lastUserInput;
 }
 
+// Setters
 
 
 Session::~Session()
@@ -63,11 +64,17 @@ Session::~Session()
 
 void Session::start() {
     cout << "SPLFLIX is now on!" << endl;
-//        while (lastUserInput != "exit"){
-//            // all action options
-//        }
+        while (lastUserInput != "exit"){
+            // all action options
+        }
 }
 
+
+// ################ Helper #################
+
+void Session::addActionLog(BaseAction *newAction) {
+    actionsLog.push_back(newAction);
+}
 
 void Session::addUser(User &toAddUser) {
     userMap.insert(make_pair(toAddUser.getName(),&toAddUser));

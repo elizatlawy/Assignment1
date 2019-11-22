@@ -68,8 +68,8 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
         lastRecommandedIndex = 0;
     int tempIndex = lastRecommandedIndex;
     lastRecommandedIndex++;
-     return history[tempIndex];
-    }
+    return history[tempIndex];
+}
 
 
 /*
@@ -96,12 +96,12 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     }
     // sort tagsVector first by value, then by key.
     std::sort(tagsVector.begin(), tagsVector.end(),[](const pair<string,int>& x, const pair<string,int>& y) {
-                  // compare second value
-                  if (x.second != y.second)
-                      return x.second > y.second;
-                  // compare first only if second value is equal
-                  return x.first < y.first;
-              });
+        // compare second value
+        if (x.second != y.second)
+            return x.second > y.second;
+        // compare first only if second value is equal
+        return x.first < y.first;
+    });
     // going over the sorted tags vector by decreasing order.
     for (int i= 0 ; i < tagsVector.size() ; i++) {
         // going over each watchable* in content

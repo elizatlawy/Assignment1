@@ -18,10 +18,6 @@ public:
 	virtual void act(Session& sess)=0;
 	virtual std::string toString() const=0;
 
-    void setErrorMsg(const std::string &errorMsg);
-
-    void setStatus(ActionStatus status);
-
 protected:
 	void complete();
 	void error(const std::string& errorMsg);
