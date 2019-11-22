@@ -11,12 +11,18 @@ using namespace std;
  */
 
 // Constructors
-ActionStatus BaseAction::getStatus() const {}
-void BaseAction::act(Session &sess) {
-    status = PENDING;
+BaseAction::BaseAction(): errorMsg(""), status(PENDING) {}
+
+// public methods
+ActionStatus BaseAction::getStatus() const {
+    return status;
+}
+void BaseAction::act(Session &sess)  {
 }
 
-string BaseAction::toString() const {}
+string BaseAction::toString() const {
+    return "";
+}
 
 // protected functions
 void BaseAction::complete() {
@@ -29,22 +35,31 @@ void BaseAction::error(const std::string &errorMsg) {
 }
 string BaseAction::getErrorMsg() const {}
 
+std::string BaseAction::statusToString() const {
+    if(getStatus() == COMPLETED)
+        return "COMPLETED";
+    else
+        return "ERROR: " + getErrorMsg();
+
+}
+
 /*
  * CreateUser
  */
 
 std::string CreateUser::toString() const {
-    string output = "CreateUser";
-    if(getStatus() == ERROR){
-        output = output + "ERROR: " + getErrorMsg();
-    }
-    // status = COMPLETED
-    else{
-        output = output + "COMPLETED";
-    }
+    return "CreateUser " + statusToString();
+//    if(getStatus() == ERROR){
+//        output = output + "ERROR: " + getErrorMsg();
+//    }
+//    // status = COMPLETED
+//    else{
+//        output = output + "COMPLETED";
+//    }
 }
 void CreateUser::act(Session &sess) {
     string tmpUserInput = sess.getLastUserInput();
+    // TODO: Fix the userName cut it is not working!!
     string userName = tmpUserInput.substr(tmpUserInput.find(" "+1),tmpUserInput.find(" "));
     string algoName = tmpUserInput.substr(tmpUserInput.length()-3);
 
@@ -116,14 +131,24 @@ void PrintWatchHistory::act(Session &sess) {}
 /*
  * Watch
  */
-std::string Watch::toString() const {}
-void Watch::act(Session &sess) {}
+std::string Watch::toString() const {
+
+}
+void Watch::act(Session &sess) {
+
+}
 
 /*
  * PrintActionsLog
  */
-std::string PrintActionsLog::toString() const {}
-void PrintActionsLog::act(Session &sess) {}
+std::string PrintActionsLog::toString() const {
+
+}
+void PrintActionsLog::act(Session &sess) {
+    for(auto& currAction : sess.getActionsLog())
+        cout << currAction->toString() << endl;
+    complete();
+}
 
 /*
  * Exit

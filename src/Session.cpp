@@ -4,6 +4,7 @@
 #include "../include/Session.h"
 #include "../include/Action.h"
 #include <fstream>
+#include "iostream"
 
 
 using namespace std;
@@ -15,6 +16,7 @@ Session::Session(const string& configFilePath){
     ifstream i(configFilePath);
     json jsonFile = json::parse(i);
     insertMovies(jsonFile);
+    // TODO: insert Next Episode id!!!
     insertSeries(jsonFile);
     actionsLog = {nullptr};
     activeUser = new LengthRecommenderUser("default");
@@ -33,6 +35,34 @@ Session::Session(const Session &other) {
 
 
 }
+
+
+
+
+Session::~Session()
+{
+}
+
+void Session::start() {
+    cout << "SPLFLIX is now on!" << endl;
+    getline(cin,lastUserInput);
+        while (lastUserInput != "exit"){
+            // all action options
+
+            if(lastUserInput.rfind("createuser", 0) == 0){
+                CreateUser *createUserAction = new CreateUser();
+                createUserAction->act(*this);
+            }
+            else if(lastUserInput.rfind("log", 0) == 0){
+                PrintActionsLog *PrintActionLogAction = new PrintActionsLog();
+                PrintActionLogAction->act(*this);
+            }
+            getline(cin,lastUserInput);
+        }
+}
+
+
+// ################ Helper functions #################
 
 // Getters
 const vector<Watchable *> &Session::getContent() const {
@@ -55,23 +85,6 @@ const string &Session::getLastUserInput() const {
     return lastUserInput;
 }
 
-// Setters
-
-
-Session::~Session()
-{
-}
-
-void Session::start() {
-    cout << "SPLFLIX is now on!" << endl;
-        while (lastUserInput != "exit"){
-            // all action options
-        }
-}
-
-
-// ################ Helper #################
-
 void Session::addActionLog(BaseAction *newAction) {
     actionsLog.push_back(newAction);
 }
@@ -79,6 +92,7 @@ void Session::addActionLog(BaseAction *newAction) {
 void Session::addUser(User &toAddUser) {
     userMap.insert(make_pair(toAddUser.getName(),&toAddUser));
 }
+
 
 // inserts all movies form the Json file
 void Session::insertMovies(json &jsonFile) {
