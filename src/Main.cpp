@@ -10,7 +10,11 @@ int main(int argc, char** argv){
 //    Movie *Mov = new Movie(l, "my movie", 60, tags);
 //    cout << Mov->toString() << endl;
 //    cout << "test";
-
+vector <int> v {1,2,3};
+    if (std::find(v.begin(), v.end(), 4) == v.end())
+        cout << "enter to if";
+    else
+        cout << " not enter to if";
 
 
 	if(argc!=2)
