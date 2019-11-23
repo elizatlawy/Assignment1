@@ -3,6 +3,7 @@
 #include "../include/Watchable.h"
 #include "../include/Session.h"
 #include "../include/Action.h"
+#include <unordered_map>
 #include <fstream>
 #include "iostream"
 
@@ -18,7 +19,7 @@ Session::Session(const string& configFilePath){
     insertMovies(jsonFile);
     // TODO: insert Next Episode id!!!
     insertSeries(jsonFile);
-    actionsLog = {nullptr};
+    //actionsLog = {nullptr};
     activeUser = new LengthRecommenderUser("default");
     userMap.insert(make_pair("default",activeUser));
 

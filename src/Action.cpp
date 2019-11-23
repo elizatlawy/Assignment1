@@ -33,7 +33,9 @@ void BaseAction::error(const std::string &errorMsg) {
     BaseAction::errorMsg = errorMsg;
 
 }
-string BaseAction::getErrorMsg() const {}
+string BaseAction::getErrorMsg() const {
+    return errorMsg;
+}
 
 std::string BaseAction::statusToString() const {
     if(getStatus() == COMPLETED)
@@ -60,7 +62,8 @@ std::string CreateUser::toString() const {
 void CreateUser::act(Session &sess) {
     string tmpUserInput = sess.getLastUserInput();
     // TODO: Fix the userName cut it is not working!!
-    string userName = tmpUserInput.substr(tmpUserInput.find(" "+1),tmpUserInput.find(" "));
+    string userName = tmpUserInput.substr(tmpUserInput.find(" "),tmpUserInput.find(" "));
+    userName = userName.substr(1);
     string algoName = tmpUserInput.substr(tmpUserInput.length()-3);
 
     // user is not exist in UserMap
@@ -83,10 +86,12 @@ void CreateUser::act(Session &sess) {
         // algo is incorrect
         else{
             error("invalid recommendation algorithm");
+            cout << toString() << endl;
         }
     } // user already exist
     else{
         error("the new user name is already taken");
+        cout << toString() << endl;
     }
     // add the action to the actions log
     sess.addActionLog(this);
@@ -145,8 +150,8 @@ std::string PrintActionsLog::toString() const {
 
 }
 void PrintActionsLog::act(Session &sess) {
-    for(auto& currAction : sess.getActionsLog())
-        cout << currAction->toString() << endl;
+    for(int i = sess.getActionsLog().size()-1; i >=0; i--)
+        cout << sess.getActionsLog()[i]->toString() << endl;
     complete();
 }
 
