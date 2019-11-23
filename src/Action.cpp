@@ -2,8 +2,9 @@
 #include "../include/Action.h"
 #include "../include/Session.h"
 #include "../include/User.h"
-
+#include <cstdlib>
 #include <vector>
+#include <string.h>
 using namespace std;
 
 /*
@@ -173,7 +174,7 @@ void DuplicateUser::act(Session &sess) {
  */
 
 std::string PrintContentList::toString() const {
-    return "content " + statusToString();
+    return "Content " + statusToString();
 }
 void PrintContentList::act(Session &sess) {
     //content is not empty
@@ -197,22 +198,65 @@ void PrintContentList::act(Session &sess) {
  *  ###################### ### PrintWatchHistory ############################
  */
 
-std::string PrintWatchHistory::toString() const {}
-void PrintWatchHistory::act(Session &sess) {}
+std::string PrintWatchHistory::toString() const {
+    return "Watchhist " + statusToString();
+}
+void PrintWatchHistory::act(Session &sess) {
+    // history is not empty
+    cout << "Watch history for " << sess.getActiveUser()->getName() << endl;
+    if (sess.getActiveUser()->get_history().size() != 0) {
+        int i = 1;
+        for (Watchable *currWatch : sess.getActiveUser()->get_history()) {
+            string tempName = currWatch->shortToString();
+            int firstSpace = tempName.find(" ");
+            cout << i << ". " << tempName.substr(firstSpace+1) << endl;
+            i++;
+            complete();
+            // recommend the user what to watch next
+
+            cout << "We recommend watching" <<
+        }
+    }
+    // history is empty
+    else {
+        error("Watch history is empty");
+        cout << toString() << endl;
+    }
+    // add the action to the actions log
+    sess.addActionLog(*this);
+}
 
 /*
- * ############################## Watch #####################################
+ * ############################## Watch ######################################
  */
 std::string Watch::toString() const {
-
+    return "Watch " + statusToString();
 }
 void Watch::act(Session &sess) {
+    //print "Watching <user_name> to the screen
+    int WatchableID = atoi(sess.getUserInputVector()[1].c_str());
+    if (WatchableID < 1 | WatchableID > sess.getContent().size() ){
+        error("this content is not available on SPLFLIX");
+        cout << toString() << endl;
+    }
+    else {
+        string tempName = sess.getContent()[WatchableID-1]->shortToString();
+        int firstSpace = tempName.find(" ");
+        cout << "Watching " << tempName.substr(firstSpace+1) << endl;
+        // add to history
+        sess.addToCurrentUserHistory(WatchableID-1);
+        complete();
+        // recommend to the user what to see next
+    }
 
+    // add the action to the actions log
+    sess.addActionLog(*this);
 }
 
 /*
  * ########################### PrintActionsLog ###############################
  */
+
 std::string PrintActionsLog::toString() const {
 // TODO ask forum
 }
@@ -223,8 +267,9 @@ void PrintActionsLog::act(Session &sess) {
 }
 
 /*
- * ################################ Exit #####################################
+ * ################################ Exit ######################################
  */
+
 std::string Exit::toString() const {}
 void Exit::act(Session &sess) {}
 
