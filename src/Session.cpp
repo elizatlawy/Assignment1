@@ -20,7 +20,6 @@ Session::Session(const string& configFilePath){
     insertMovies(jsonFile);
     // TODO: insert Next Episode id!!!
     insertSeries(jsonFile);
-    //actionsLog = {nullptr};
     activeUser = new LengthRecommenderUser("default");
     userMap.insert(make_pair("default",activeUser));
 
@@ -63,10 +62,14 @@ void Session::start() {
                 PrintActionsLog *PrintActionLogAction = new PrintActionsLog();
                 PrintActionLogAction->act(*this);
             }
-            getline(cin,lastUserInput);
+            else if(lastUserInput.rfind("content", 0) == 0) {
+                PrintContentList *PrintContentListAction = new PrintContentList();
+                PrintContentListAction->act(*this);
+                }
 
+            getline(cin,lastUserInput);
+            }
         }
-}
 
 
 // ################ Helper functions #################

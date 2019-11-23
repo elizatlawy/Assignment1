@@ -7,7 +7,7 @@
 using namespace std;
 
 /*
- * BaseAction
+ * ########################## BaseAction ##########################
  */
 
 // Constructors
@@ -23,7 +23,6 @@ void BaseAction::act(Session &sess)  {
 string BaseAction::toString() const {
     return "";
 }
-
 // protected functions
 void BaseAction::complete() {
     status = COMPLETED;
@@ -46,18 +45,11 @@ std::string BaseAction::statusToString() const {
 }
 
 /*
- * CreateUser
+ * #####################################CreateUser##################################
  */
 
 std::string CreateUser::toString() const {
     return "CreateUser " + statusToString();
-//    if(getStatus() == ERROR){
-//        output = output + "ERROR: " + getErrorMsg();
-//    }
-//    // status = COMPLETED
-//    else{
-//        output = output + "COMPLETED";
-//    }
 }
 void CreateUser::act(Session &sess) {
     string tmpUserInput = sess.getLastUserInput();
@@ -97,41 +89,59 @@ void CreateUser::act(Session &sess) {
 
 
 /*
- *  ChangeActiveUser
+ * ############################ ChangeActiveUser ############################
  */
 
 std::string ChangeActiveUser::toString() const {}
 void ChangeActiveUser::act(Session &sess) {}
 
 /*
- * DeleteUser
+ * ############################# DeleteUser #################################
  */
 std::string DeleteUser::toString() const {}
 void DeleteUser::act(Session &sess) {}
 
 /*
- * DuplicateUser
+ * ############################## DuplicateUser ##############################
  */
 
 std::string DuplicateUser::toString() const {}
 void DuplicateUser::act(Session &sess) {}
 
 /*
- * PrintContentList
+ * ########################## PrintContentList ##############################
  */
 
-std::string PrintContentList::toString() const {}
-void PrintContentList::act(Session &sess) {}
+std::string PrintContentList::toString() const {
+    return "content " + statusToString();
+}
+void PrintContentList::act(Session &sess) {
+    //content is not empty
+    if (sess.getContent().size() != 0) {
+        for (Watchable *currWatch : sess.getContent()) {
+            cout << currWatch->toString() << endl;
+            complete();
+        }
+    }
+    // content is empty
+    else {
+        error("there is no content available right now, please try again later");
+        cout << toString() << endl;
+    }
+    // add the action to the actions log
+    sess.addActionLog(this);
+
+} // end of PrintContentList
 
 /*
- * PrintWatchHistory
+ *  ###################### ### PrintWatchHistory ############################
  */
 
 std::string PrintWatchHistory::toString() const {}
 void PrintWatchHistory::act(Session &sess) {}
 
 /*
- * Watch
+ * ############################## Watch #####################################
  */
 std::string Watch::toString() const {
 
@@ -141,10 +151,10 @@ void Watch::act(Session &sess) {
 }
 
 /*
- * PrintActionsLog
+ * ########################### PrintActionsLog ###############################
  */
 std::string PrintActionsLog::toString() const {
-
+// TODO ask forum
 }
 void PrintActionsLog::act(Session &sess) {
     for(int i = sess.getActionsLog().size()-1; i >=0; i--)
@@ -153,7 +163,7 @@ void PrintActionsLog::act(Session &sess) {
 }
 
 /*
- * Exit
+ * ################################ Exit #####################################
  */
 std::string Exit::toString() const {}
 void Exit::act(Session &sess) {}

@@ -83,12 +83,12 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
 GenreRecommenderUser::GenreRecommenderUser(const string& name) : User(name){}
 
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
-// create 2 vectors -  the first holds the name of the tags and the second  holds the number of appearances in watchHistory
+ //create 2 vectors -  the first holds the name of the tags and the second  holds the number of appearances in watchHistory
     vector<pair<string,int>> tagsVector;
     for (int i = 0; i < history.size(); i++) {
         for (int j = 0; j < history[i]->getTags().size(); j++) {
             string currTag = history[i]->getTags()[j];
-            vector<pair<string,int>>::iterator itr = std::find(tagsVector.begin(), tagsVector.end(),make_pair(currTag,0 ));
+            vector<pair<string,int>>::iterator itr = std::find(tagsVector.begin(), tagsVector.end(), make_pair(currTag,0)); //TODO check if works
             if (itr != tagsVector.cend()) { //currTag is found
                 int index = distance(tagsVector.begin(), itr);
                 tagsVector[index].second++;
@@ -122,4 +122,7 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
             }
         }
     }
+
+
+
 } // end of GenreRecommendion
