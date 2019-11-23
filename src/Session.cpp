@@ -3,6 +3,7 @@
 #include "../include/Watchable.h"
 #include "../include/Session.h"
 #include "../include/Action.h"
+#include <bits/stdc++.h>
 #include <unordered_map>
 #include <fstream>
 #include "iostream"
@@ -48,8 +49,12 @@ void Session::start() {
     cout << "SPLFLIX is now on!" << endl;
     getline(cin,lastUserInput);
         while (lastUserInput != "exit"){
+            std::istringstream iss(lastUserInput);
+            std::vector<std::string> results(std::istream_iterator<std::string>{iss},
+                                             std::istream_iterator<std::string>());
+            userInputVector = results;
             // all action options
-
+            // TODO: Change all if to work with the VectorInput!!
             if(lastUserInput.rfind("createuser", 0) == 0){
                 CreateUser *createUserAction = new CreateUser();
                 createUserAction->act(*this);
@@ -59,6 +64,7 @@ void Session::start() {
                 PrintActionLogAction->act(*this);
             }
             getline(cin,lastUserInput);
+
         }
 }
 
@@ -92,6 +98,10 @@ void Session::addActionLog(BaseAction *newAction) {
 
 void Session::addUser(User &toAddUser) {
     userMap.insert(make_pair(toAddUser.getName(),&toAddUser));
+}
+
+const vector<std::string> &Session::getUserInputVector() const {
+    return userInputVector;
 }
 
 

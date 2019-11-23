@@ -61,11 +61,8 @@ std::string CreateUser::toString() const {
 }
 void CreateUser::act(Session &sess) {
     string tmpUserInput = sess.getLastUserInput();
-    // TODO: Fix the userName cut it is not working!!
-    string userName = tmpUserInput.substr(tmpUserInput.find(" "),tmpUserInput.find(" "));
-    userName = userName.substr(1);
-    string algoName = tmpUserInput.substr(tmpUserInput.length()-3);
-
+    string userName = sess.getUserInputVector()[1];
+    string algoName = sess.getUserInputVector()[2];
     // user is not exist in UserMap
     if(sess.getUserMap().find(userName) == sess.getUserMap().end()){
         if(algoName == "len" | algoName == "rer" | algoName == "gen"){
