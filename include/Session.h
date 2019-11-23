@@ -29,19 +29,21 @@ public:
     User *getActiveUser() const;
 
     const std::string &getLastUserInput() const;
-    void addUser (User &toAddUser);
-    void addActionLog (BaseAction* newAction);
+    void addUser (User& toAddUser);
+    void addActionLog (BaseAction& newAction);
 
     const std::vector<std::string> &getUserInputVector() const;
-
+    void setActiveUser(User& activeUser);
+    void removeUser(std::string& userName);
 private:
     std::vector<Watchable*> content;
     std::vector<BaseAction*> actionsLog;
     std::unordered_map<std::string,User*> userMap;
     User* activeUser;
-    void insertMovies (json &jsonFile);
-    void insertSeries (json &jsonFile);
+    void insertMovies (json& jsonFile);
+    void insertSeries (json& jsonFile);
     std::string lastUserInput;
     std::vector<std::string> userInputVector;
+
 };
 #endif

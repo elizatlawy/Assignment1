@@ -3,10 +3,10 @@
 #include "../include/Watchable.h"
 #include "../include/Session.h"
 #include "../include/Action.h"
-#include <bits/stdc++.h>
+#include <sstream>
 #include <unordered_map>
 #include <fstream>
-#include "iostream"
+#include <iostream>
 
 
 using namespace std;
@@ -37,15 +37,13 @@ Session::Session(const Session &other) {
 
 }
 
-
-
-
 Session::~Session()
 {
 }
 
 void Session::start() {
     cout << "SPLFLIX is now on!" << endl;
+    // TODO: DELETE latInputUser for session class
     getline(cin,lastUserInput);
         while (lastUserInput != "exit"){
             std::istringstream iss(lastUserInput);
@@ -53,26 +51,39 @@ void Session::start() {
                                              std::istream_iterator<std::string>());
             userInputVector = results;
             // all action options
-            // TODO: Change all if to work with the VectorInput!!
-            if(lastUserInput.rfind("createuser", 0) == 0){
+            if(userInputVector[0] == "createuser"){
                 CreateUser *createUserAction = new CreateUser();
                 createUserAction->act(*this);
             }
-            else if(lastUserInput.rfind("log", 0) == 0){
+            else if(userInputVector[0] == "log"){
                 PrintActionsLog *PrintActionLogAction = new PrintActionsLog();
                 PrintActionLogAction->act(*this);
             }
-            else if(lastUserInput.rfind("content", 0) == 0) {
+            else if(userInputVector[0] == "content") {
                 PrintContentList *PrintContentListAction = new PrintContentList();
                 PrintContentListAction->act(*this);
                 }
+            else if(userInputVector[0] == "changeuser") {
+                ChangeActiveUser *ChangeActiveUserAction = new ChangeActiveUser();
+                ChangeActiveUserAction->act(*this);
+            }
+            else if(userInputVector[0] == "deleteuser") {
+                DeleteUser *DeleteUserAction = new DeleteUser();
+                DeleteUserAction->act(*this);
+            }
+            else if(userInputVector[0] == "dupuser") {
+                DeleteUser *DeleteUserAction = new DeleteUser();
+                DeleteUserAction->act(*this);
+            }
+            else{
+                cout << "Illegal Command, Please Try Again" << endl;
+            }
 
             getline(cin,lastUserInput);
             }
+        // TODO: throw error if you got invalid commend
         }
 
-
-// ################ Helper functions #################
 
 // Getters
 const vector<Watchable *> &Session::getContent() const {
@@ -95,16 +106,24 @@ const string &Session::getLastUserInput() const {
     return lastUserInput;
 }
 
-void Session::addActionLog(BaseAction *newAction) {
-    actionsLog.push_back(newAction);
+
+
+const vector<std::string> &Session::getUserInputVector() const {
+    return userInputVector;
+}
+
+void Session::setActiveUser(User &activeUser) {
+    Session::activeUser = &activeUser;
+}
+
+// ################ Helper functions #################
+
+void Session::addActionLog(BaseAction &newAction) {
+    actionsLog.push_back(&newAction);
 }
 
 void Session::addUser(User &toAddUser) {
     userMap.insert(make_pair(toAddUser.getName(),&toAddUser));
-}
-
-const vector<std::string> &Session::getUserInputVector() const {
-    return userInputVector;
 }
 
 
@@ -138,6 +157,10 @@ void Session::insertSeries(json &jsonFile) {
             seasonNumber++;
         }
     }
+}
+
+void Session::removeUser(std::string& userName) {
+    userMap.erase(userName);
 }
 
 

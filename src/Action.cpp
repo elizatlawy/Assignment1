@@ -54,6 +54,7 @@ std::string CreateUser::toString() const {
 void CreateUser::act(Session &sess) {
     string tmpUserInput = sess.getLastUserInput();
     string userName = sess.getUserInputVector()[1];
+
     string algoName = sess.getUserInputVector()[2];
     // user is not exist in UserMap
     if(sess.getUserMap().find(userName) == sess.getUserMap().end()){
@@ -83,7 +84,7 @@ void CreateUser::act(Session &sess) {
         cout << toString() << endl;
     }
     // add the action to the actions log
-    sess.addActionLog(this);
+    sess.addActionLog(*this);
 
 } // end of CreateUser
 
@@ -92,21 +93,80 @@ void CreateUser::act(Session &sess) {
  * ############################ ChangeActiveUser ############################
  */
 
-std::string ChangeActiveUser::toString() const {}
-void ChangeActiveUser::act(Session &sess) {}
+std::string ChangeActiveUser::toString() const {
+    return "ChangeUser " + statusToString();
+}
+
+void ChangeActiveUser::act(Session &sess) {
+    string userNameToChange = sess.getUserInputVector()[1];
+    // if the user exist
+    if(sess.getUserMap().find(userNameToChange) != sess.getUserMap().end()){
+        sess.setActiveUser(*sess.getUserMap().at(userNameToChange));
+        complete();
+    }
+    // if the user does not exist in UserMap
+    else{
+        error("the user you have entered does not exist");
+        cout << toString() << endl;
+    }
+    sess.addActionLog(*this);
+}
 
 /*
  * ############################# DeleteUser #################################
  */
-std::string DeleteUser::toString() const {}
-void DeleteUser::act(Session &sess) {}
+std::string DeleteUser::toString() const {
+    return "DeleteUser " + statusToString();
+}
+void DeleteUser::act(Session &sess) {
+    // TODO STILL NEED TO CHECK IT WAIT FOR Nadva Watch function
+    string userNameToDelete = sess.getUserInputVector()[1];
+    // if the user exist
+    if(sess.getUserMap().find(userNameToDelete) != sess.getUserMap().end()){
+        delete sess.getUserMap().at(userNameToDelete);
+        // remove the user from userMap
+        sess.removeUser(userNameToDelete);
+        complete();
+    }
+    // if the user does not exist in UserMap
+    else{
+        error("the user you have entered does not exist");
+        cout << toString() << endl;
+    }
+    sess.addActionLog(*this);
+}
+
 
 /*
  * ############################## DuplicateUser ##############################
  */
 
-std::string DuplicateUser::toString() const {}
-void DuplicateUser::act(Session &sess) {}
+std::string DuplicateUser::toString() const {
+    return "DuplicateUser " + statusToString();
+}
+void DuplicateUser::act(Session &sess) {
+    string originalUserName = sess.getUserInputVector()[1];
+    string newUserName = sess.getUserInputVector()[2];
+    // check if the original user not exits & if the new user name is not already taken
+    if(sess.getUserMap().find(newUserName) != sess.getUserMap().end() & // if the new user name is no already taken
+            (sess.getUserMap().find(originalUserName) == sess.getUserMap().end())){ // if the original user exits
+        // TODO: creates new user + duplicate the old user history
+
+
+
+
+        complete();
+    }
+
+    else{
+        error("the original user does not exits or the new user name is already taken");
+        cout << toString() << endl;
+    }
+    sess.addActionLog(*this);
+
+
+
+}
 
 /*
  * ########################## PrintContentList ##############################
@@ -129,7 +189,7 @@ void PrintContentList::act(Session &sess) {
         cout << toString() << endl;
     }
     // add the action to the actions log
-    sess.addActionLog(this);
+    sess.addActionLog(*this);
 
 } // end of PrintContentList
 

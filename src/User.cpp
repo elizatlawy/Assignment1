@@ -10,7 +10,7 @@ using namespace std;
  * #####################################User###################################
  */
 User::User(const string& name) : name(name){
-    history = {nullptr};
+
 }
 Watchable* User::getRecommendation(Session &s) {}
 string User::getName() const {
@@ -18,6 +18,12 @@ string User::getName() const {
 }
 vector<Watchable*> User::get_history() const {
     return  history;
+}
+
+User::~User() {
+    // clear all history pointers
+    history.clear();
+
 }
 
 /*

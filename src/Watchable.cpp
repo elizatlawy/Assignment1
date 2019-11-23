@@ -1,7 +1,6 @@
 
 #include "../include/Watchable.h"
 #include <vector>
-#include <iterator>
 using namespace std;
 
 /*
