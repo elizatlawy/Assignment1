@@ -4,7 +4,6 @@
 #include "../include/User.h"
 #include <cstdlib>
 #include <vector>
-#include <string.h>
 using namespace std;
 
 /*
@@ -198,7 +197,7 @@ void PrintContentList::act(Session &sess) {
  *  ###################### ### PrintWatchHistory ############################
  */
 
-std::string PrintWatchHistory::toString() const {
+std::string PrintWatchHistory::toString() const { // TODO ask what do in case of empty history
     return "Watchhist " + statusToString();
 }
 void PrintWatchHistory::act(Session &sess) {
@@ -212,8 +211,6 @@ void PrintWatchHistory::act(Session &sess) {
             cout << i << ". " << tempName.substr(firstSpace + 1) << endl;
             i++;
             complete();
-            // recommend the user what to watch next
-
         }
     }
     // history is empty
@@ -232,24 +229,39 @@ std::string Watch::toString() const {
     return "Watch " + statusToString();
 }
 void Watch::act(Session &sess) {
-    //print "Watching <user_name> to the screen
+    // TODO DEBUG!!
+    string isAgreed = "y";
     int WatchableID = atoi(sess.getUserInputVector()[1].c_str());
-    if (WatchableID < 1 | WatchableID > sess.getContent().size() ){
-        error("this content is not available on SPLFLIX");
-        cout << toString() << endl;
-    }
-    else {
-        string tempName = sess.getContent()[WatchableID-1]->shortToString();
-        int firstSpace = tempName.find(" ");
-        cout << "Watching " << tempName.substr(firstSpace+1) << endl;
-        // add to history
-        sess.addToCurrentUserHistory(WatchableID-1);
-        complete();
-        // recommend to the user what to see next
+    while(isAgreed == "y"){
+        //print "Watching <user_name> to the screen
+        if (WatchableID < 1 | WatchableID > sess.getContent().size() ){
+            error("this content is not available on SPLFLIX");
+            cout << toString() << endl;
+        }
+        else {
+            string tempName = sess.getContent()[WatchableID-1]->shortToString();
+            int firstSpace = tempName.find(" ");
+            cout << "Watching " << tempName.substr(firstSpace+1) << endl;
+            // add to history
+            sess.addToCurrentUserHistory(WatchableID-1);
+            // recommend to the user what to see next
+            Watchable* nextRecommendation = sess.getActiveUser()->get_history()[sess.getActiveUser()->get_history().size()-1]->getNextWatchable(sess);
+            if(nextRecommendation == nullptr){
+                error("Sorry, no recommendation was found for you :(");
+                cout << toString() << endl;
+                break;
+            }
+            firstSpace = nextRecommendation->shortToString().find(" ");
+            cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace+1) << " ,continue watching?" << " [y/n]" << endl;
+            WatchableID = nextRecommendation->getId();
+            complete();
+            cin >> isAgreed;
+        }
+        // add the action to the actions log
+        sess.addActionLog(*this);
+
     }
 
-    // add the action to the actions log
-    sess.addActionLog(*this);
 }
 
 /*

@@ -18,7 +18,6 @@ Session::Session(const string& configFilePath){
     ifstream i(configFilePath);
     json jsonFile = json::parse(i);
     insertMovies(jsonFile);
-    // TODO: insert Next Episode id!!!
     insertSeries(jsonFile);
     activeUser = new LengthRecommenderUser("default");
     userMap.insert(make_pair("default",activeUser));

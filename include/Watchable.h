@@ -4,7 +4,8 @@
 
 #include <string>
 #include <vector>
-
+#include "../include/Session.h"
+#include "../include/User.h"
 
 class Session;
 
@@ -13,8 +14,9 @@ public:
     Watchable(long id, int length, const std::vector<std::string>& tags);
     virtual ~Watchable();
     virtual std::string toString() const = 0;
-    virtual Watchable* getNextWatchable(Session&) const = 0;
+    virtual Watchable* getNextWatchable(Session& sess) const = 0;
     virtual std::string shortToString() const = 0;
+    virtual std::string getName() const = 0;
 
     const long getId() const;
     int getLength() const;
@@ -47,9 +49,9 @@ public:
     Movie(const Movie& other);
     virtual std::string toString() const;
 
-    virtual Watchable* getNextWatchable(Session&) const;
+    virtual Watchable* getNextWatchable(Session& sess) const;
 
-    const std::string &getName() const;
+    virtual std::string getName() const;
 
     virtual std::string shortToString () const;
 
@@ -64,16 +66,18 @@ class Episode: public Watchable{
 public:
     Episode(long id, const std::string& seriesName,int length, int season, int episode ,const std::vector<std::string>& tags);
     virtual std::string toString() const;
-    virtual Watchable* getNextWatchable(Session&) const;
+    virtual Watchable* getNextWatchable(Session& sess) const;
     virtual std::string shortToString () const;
 
-    const std::string &getSeriesName() const;
+    virtual std::string getName() const;
 
     int getSeason() const;
 
     int getEpisode() const;
 
     long getNextEpisodeId() const;
+
+    void setNextEpisodeId(long nextEpisodeId);
 
 private:
     std::string seriesName;

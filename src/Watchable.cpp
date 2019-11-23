@@ -10,7 +10,7 @@ using namespace std;
 // Constructors
 Watchable::Watchable(long id, int length, const vector<string> &tags) : id(id), length(length), tags(tags) {}
 //std::string Watchable::toString() const {}
-Watchable* Watchable::getNextWatchable(Session &) const {}
+Watchable* Watchable::getNextWatchable(Session & sess) const {}
 Watchable::~Watchable() {}
 
 // Getters
@@ -42,7 +42,7 @@ Movie::Movie(long id, const string& name, int length, const vector<string>& tags
 // copy constructor
 Movie::Movie(const Movie &other) :  Watchable(other.getId(), other.getLength(), other.getTags()), name(other.getName()) {}
 // getters
-const string &Movie::getName() const {
+std::string Movie::getName() const {
     return name;
 }
 
@@ -85,16 +85,17 @@ bool Watchable::operator>=(const Watchable &rhs) const {
     return !(*this < rhs);
 }
 
-Watchable* Movie::getNextWatchable(Session &) const {
-
+Watchable* Movie::getNextWatchable(Session& sess) const {
+    return sess.getActiveUser()->getRecommendation(sess);
 }
 
 /*
  *  ####################### Episode  #######################
  */
-Episode::Episode(long id, const string& seriesName, int length, int season, int episode, const vector<string>& tags ) : Watchable(id, length, tags), seriesName(seriesName), season(season), episode(episode){};
+Episode::Episode(long id, const string& seriesName, int length, int season, int episode, const vector<string>& tags ) : Watchable(id, length, tags),
+seriesName(seriesName), season(season), episode(episode), nextEpisodeId(id+1){};
 
-const string &Episode::getSeriesName() const {
+std::string Episode::getName() const {
     return seriesName;
 }
 
@@ -127,7 +128,17 @@ string Episode::toString() const {
     return output;
 }
 
-Watchable* Episode::getNextWatchable(Session &) const {}
+Watchable* Episode::getNextWatchable(Session & sess) const {
+    if(nextEpisodeId < sess.getContent().size()){ // check if it is not the last Episode in content
+        if(sess.getContent()[nextEpisodeId]->getName() == seriesName){ // check if it is not the last Episode in the serie
+            return sess.getContent()[nextEpisodeId];
+        }
+        else
+            sess.getActiveUser()->getRecommendation(sess);
+    }
+    else
+        sess.getActiveUser()->getRecommendation(sess);
+}
 
 std::string Episode::shortToString() const {
     string tagsString = "";
@@ -145,6 +156,10 @@ std::string Episode::shortToString() const {
         printEpisode = "0" + printEpisode;
     string output = to_string(getId()+1) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode;
     return output;
+}
+
+void Episode::setNextEpisodeId(long nextEpisodeId) {
+    Episode::nextEpisodeId = nextEpisodeId;
 }
 
 // end of Episode class

@@ -34,7 +34,7 @@ User::~User() {
 /*
  * ##########################LengthRecommenderUser###########################
  */
-
+// TODO: CHECK if all algo have a null condition
 LengthRecommenderUser::LengthRecommenderUser(const string& name) : User(name){}
 
 Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
