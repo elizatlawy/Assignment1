@@ -9,7 +9,7 @@ using namespace std;
 
 // Constructors
 Watchable::Watchable(long id, int length, const vector<string> &tags) : id(id), length(length), tags(tags) {}
-std::string Watchable::toString() const {}
+//std::string Watchable::toString() const {}
 Watchable* Watchable::getNextWatchable(Session &) const {}
 Watchable::~Watchable() {}
 
@@ -25,6 +25,7 @@ const vector<std::string> &Watchable::getTags() const {
     return tags;
 }
 
+
 bool Watchable::operator==(const Watchable &rhs) const {
     return id == rhs.id;
 }
@@ -36,11 +37,11 @@ bool Watchable::operator!=(const Watchable &rhs) const {
 /*
  *  ####################### Movie  #######################
  */
-
+// constructor
 Movie::Movie(long id, const string& name, int length, const vector<string>& tags) :  Watchable(id, length, tags), name(name) {}
 // copy constructor
 Movie::Movie(const Movie &other) :  Watchable(other.getId(), other.getLength(), other.getTags()), name(other.getName()) {}
-
+// getters
 const string &Movie::getName() const {
     return name;
 }
@@ -55,6 +56,17 @@ string Movie::toString() const {
     string output = to_string(getId()+1) + ". " + name + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
     return output;
 } //
+
+std::string Movie::shortToString() const {
+    string tagsString = "";
+    string separator;
+    for(auto& tag: getTags()){
+        tagsString = tagsString + separator + tag;
+        separator = ", ";
+    }
+    string output = to_string(getId()+1) + ". " + name ;
+    return output;
+}
 
 // relation operands
 bool Watchable::operator<(const Watchable &rhs) const {
@@ -73,7 +85,9 @@ bool Watchable::operator>=(const Watchable &rhs) const {
     return !(*this < rhs);
 }
 
-Watchable* Movie::getNextWatchable(Session &) const {}
+Watchable* Movie::getNextWatchable(Session &) const {
+
+}
 
 /*
  *  ####################### Episode  #######################
@@ -111,10 +125,26 @@ string Episode::toString() const {
         printEpisode = "0" + printEpisode;
     string output = to_string(getId()+1) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
     return output;
-
 }
 
-
 Watchable* Episode::getNextWatchable(Session &) const {}
+
+std::string Episode::shortToString() const {
+    string tagsString = "";
+    string separator;
+    // TODO: MAKE THIS Helper function
+    for(auto& tag: getTags()){
+        tagsString = tagsString + separator + tag;
+        separator = ", ";
+    }
+    string printSeason = to_string(season);
+    string printEpisode = to_string(episode);
+    if (season < 10)
+        printSeason = "0" + printSeason;
+    if(episode < 10)
+        printEpisode = "0" + printEpisode;
+    string output = to_string(getId()+1) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode;
+    return output;
+}
 
 // end of Episode class

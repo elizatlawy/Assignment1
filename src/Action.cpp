@@ -209,12 +209,11 @@ void PrintWatchHistory::act(Session &sess) {
         for (Watchable *currWatch : sess.getActiveUser()->get_history()) {
             string tempName = currWatch->shortToString();
             int firstSpace = tempName.find(" ");
-            cout << i << ". " << tempName.substr(firstSpace+1) << endl;
+            cout << i << ". " << tempName.substr(firstSpace + 1) << endl;
             i++;
             complete();
             // recommend the user what to watch next
 
-            cout << "We recommend watching" <<
         }
     }
     // history is empty

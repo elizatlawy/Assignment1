@@ -12,12 +12,17 @@ using namespace std;
 User::User(const string& name) : name(name){
 
 }
+
 Watchable* User::getRecommendation(Session &s) {}
 string User::getName() const {
     return name;
 }
 vector<Watchable*> User::get_history() const {
     return  history;
+}
+void User::addToHistory(Watchable &currWatchable) {
+    history.push_back(&currWatchable);
+    //TODO check if currWatchable is saved as reference to content
 }
 
 User::~User() {
@@ -67,6 +72,7 @@ Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
         return contentCopy[j];
 
 }
+
 /*
  * #####################RerunRecommenderUser########################
  */
@@ -81,7 +87,6 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
     return history[tempIndex];
 }
 
-
 /*
  * ########################GenreRecommenderUser#####################
  */
@@ -89,23 +94,23 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
 GenreRecommenderUser::GenreRecommenderUser(const string& name) : User(name){}
 
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
- //create 2 vectors -  the first holds the name of the tags and the second  holds the number of appearances in watchHistory
-    vector<pair<string,int>> tagsVector;
+    //create 2 vectors -  the first holds the name of the tags and the second  holds the number of appearances in watchHistory
+    vector<pair<string, int>> tagsVector;
     for (int i = 0; i < history.size(); i++) {
         for (int j = 0; j < history[i]->getTags().size(); j++) {
             string currTag = history[i]->getTags()[j];
-            vector<pair<string,int>>::iterator itr = std::find(tagsVector.begin(), tagsVector.end(), make_pair(currTag,0)); //TODO check if works
+            vector<pair<string, int>>::iterator itr = std::find(tagsVector.begin(), tagsVector.end(),
+                                                                make_pair(currTag, 0)); //TODO check if works
             if (itr != tagsVector.cend()) { //currTag is found
                 int index = distance(tagsVector.begin(), itr);
                 tagsVector[index].second++;
-            }
-            else{ // currTag is not found
-                tagsVector.push_back(make_pair(currTag,1));
+            } else { // currTag is not found
+                tagsVector.push_back(make_pair(currTag, 1));
             }
         }
     }
     // sort tagsVector first by value, then by key.
-    std::sort(tagsVector.begin(), tagsVector.end(),[](const pair<string,int>& x, const pair<string,int>& y) {
+    std::sort(tagsVector.begin(), tagsVector.end(), [](const pair<string, int> &x, const pair<string, int> &y) {
         // compare second value
         if (x.second != y.second)
             return x.second > y.second;
@@ -113,7 +118,7 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
         return x.first < y.first;
     });
     // going over the sorted tags vector by decreasing order.
-    for (int i= 0 ; i < tagsVector.size() ; i++) {
+    for (int i = 0; i < tagsVector.size(); i++) {
         // going over each watchable* in content
         for (int j = 0; j < s.getContent().size(); j++) {
             // going over all tags of curr watchable*
@@ -130,5 +135,4 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     }
 
 
-
-} // end of GenreRecommendion
+};// end of GenreRecommendion

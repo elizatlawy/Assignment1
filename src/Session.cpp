@@ -34,7 +34,6 @@ Session::Session(const Session &other) {
 //        actionsLog.push_back(currActionLog);
     // need to complete userMap + activeUser.
 
-
 }
 
 Session::~Session()
@@ -75,14 +74,23 @@ void Session::start() {
                 DeleteUser *DeleteUserAction = new DeleteUser();
                 DeleteUserAction->act(*this);
             }
+
+            else if(userInputVector[0] == "watchhist") {
+                PrintWatchHistory *PrintWatchHistoryAction = new PrintWatchHistory();
+                PrintWatchHistoryAction->act(*this);
+            }
+            else if(userInputVector[0] == "watch") {
+                Watch *WatchAction = new Watch();
+                WatchAction->act(*this);
+            }
             else{
                 cout << "Illegal Command, Please Try Again" << endl;
             }
-
             getline(cin,lastUserInput);
             }
         // TODO: throw error if you got invalid commend
         }
+
 
 
 // Getters
@@ -106,7 +114,11 @@ const string &Session::getLastUserInput() const {
     return lastUserInput;
 }
 
+// ################ Helper functions #################
 
+void Session::addUser(User &toAddUser) {
+    userMap.insert(make_pair(toAddUser.getName(),&toAddUser));
+}
 
 const vector<std::string> &Session::getUserInputVector() const {
     return userInputVector;
@@ -116,15 +128,14 @@ void Session::setActiveUser(User &activeUser) {
     Session::activeUser = &activeUser;
 }
 
-// ################ Helper functions #################
-
 void Session::addActionLog(BaseAction &newAction) {
     actionsLog.push_back(&newAction);
 }
 
-void Session::addUser(User &toAddUser) {
-    userMap.insert(make_pair(toAddUser.getName(),&toAddUser));
+void Session::addToCurrentUserHistory(int id) {
+    activeUser->addToHistory(*content[id]);
 }
+
 
 
 // inserts all movies form the Json file
@@ -162,6 +173,4 @@ void Session::insertSeries(json &jsonFile) {
 void Session::removeUser(std::string& userName) {
     userMap.erase(userName);
 }
-
-
 
