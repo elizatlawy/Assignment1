@@ -4,6 +4,8 @@
 #include "../include/Session.h"
 #include <vector>
 #include <utility>
+
+
 using namespace std;
 
 /*
@@ -13,8 +15,13 @@ User::User(const string& name) : name(name){
     history = {nullptr};
 }
 Watchable* User::getRecommendation(Session &s) {}
-string User::getName() const {}
-vector<Watchable*> User::get_history() const {}
+string User::getName() const {
+    return name;
+}
+vector<Watchable*> User::get_history(
+        ) const {
+    return history;
+}
 
 /*
  * ##########################LengthRecommenderUser###########################
@@ -84,7 +91,7 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     for (int i = 0; i < history.size(); i++) {
         for (int j = 0; j < history[i]->getTags().size(); j++) {
             string currTag = history[i]->getTags()[j];
-            vector<pair<string,int>>::iterator itr = std::find(tagsVector.begin(), tagsVector.end(), currTag);
+            vector<pair<string,int>>::iterator itr = std::find(tagsVector.begin(), tagsVector.end(), make_pair(currTag,0)); // TODO: check if compare by name;
             if (itr != tagsVector.cend()) { //currTag is found
                 int index = distance(tagsVector.begin(), itr);
                 tagsVector[index].second++;
@@ -110,7 +117,7 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
             for (int k = 0; k < s.getContent()[j]->getTags().size(); k++) {
                 string currTag = s.getContent()[j]->getTags()[k];
                 if (tagsVector[i].first == currTag) {
-                    vector<Watchable *>::iterator itr = std::find(history.begin(), history.end(), s.getContent()[j]);
+                    vector<Watchable*>::iterator itr = std::find(history.begin(), history.end(), s.getContent()[j]);
                     if (itr == history.cend()) { //watchable* is not found
                         return s.getContent()[j];
                     }

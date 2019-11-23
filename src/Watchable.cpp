@@ -26,6 +26,14 @@ const vector<std::string> &Watchable::getTags() const {
     return tags;
 }
 
+bool Watchable::operator==(const Watchable &rhs) const {
+    return id == rhs.id;
+}
+
+bool Watchable::operator!=(const Watchable &rhs) const {
+    return !(rhs == *this);
+}
+
 /*
  *  ####################### Movie  #######################
  */
@@ -64,14 +72,6 @@ bool Watchable::operator<=(const Watchable &rhs) const {
 
 bool Watchable::operator>=(const Watchable &rhs) const {
     return !(*this < rhs);
-}
-
-bool Watchable::operator==(const Watchable &rhs) const {
-    return id == rhs.id;
-}
-
-bool Watchable::operator!=(const Watchable &rhs) const {
-    return !(rhs == *this);
 }
 
 Watchable* Movie::getNextWatchable(Session &) const {}
