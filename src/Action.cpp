@@ -95,7 +95,7 @@ void CreateUser::act(Session &sess) {
 
 
 /*
- * ChangeActiveUser
+ *  ChangeActiveUser
  */
 
 std::string ChangeActiveUser::toString() const {}
