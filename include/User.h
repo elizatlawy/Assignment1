@@ -31,7 +31,6 @@ public:
 
 private:
 
-
 };
 
 class RerunRecommenderUser : public User {

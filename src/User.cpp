@@ -13,6 +13,7 @@ User::User(const string& name) : name(name){
 
 }
 
+// getters
 Watchable* User::getRecommendation(Session &s) {}
 string User::getName() const {
     return name;
@@ -47,7 +48,7 @@ Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
     avrLenOfHistory = (double) (sumOfAllContent) / history.size();
     vector<Watchable *> contentCopy = s.getContent();
     // sort vector contentCopy
-    sort(contentCopy.begin(), contentCopy.end());
+    sort(contentCopy.begin(), contentCopy.end()); // TODO sort by length
     int i = 0;
     int j = contentCopy.size() - 1;
     while (contentCopy[i]->getLength() < avrLenOfHistory) {
@@ -70,7 +71,6 @@ Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
         return contentCopy[i];
     else
         return contentCopy[j];
-
 }
 
 /*

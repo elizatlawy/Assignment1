@@ -53,7 +53,7 @@ string Movie::toString() const {
         tagsString = tagsString + separator + tag;
         separator = ", ";
     }
-    string output = to_string(getId()+1) + ". " + name + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
+    string output = to_string(getId()) + ". " + name + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
     return output;
 } //
 
@@ -64,7 +64,7 @@ std::string Movie::shortToString() const {
         tagsString = tagsString + separator + tag;
         separator = ", ";
     }
-    string output = to_string(getId()+1) + ". " + name ;
+    string output = to_string(getId()) + ". " + name ;
     return output;
 }
 
@@ -93,7 +93,7 @@ Watchable* Movie::getNextWatchable(Session& sess) const {
  *  ####################### Episode  #######################
  */
 Episode::Episode(long id, const string& seriesName, int length, int season, int episode, const vector<string>& tags ) : Watchable(id, length, tags),
-seriesName(seriesName), season(season), episode(episode), nextEpisodeId(id+1){};
+seriesName(seriesName), season(season), episode(episode), nextEpisodeId((long)(id+1)){};
 
 std::string Episode::getName() const {
     return seriesName;
@@ -124,14 +124,14 @@ string Episode::toString() const {
         printSeason = "0" + printSeason;
     if(episode < 10)
         printEpisode = "0" + printEpisode;
-    string output = to_string(getId()+1) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
+    string output = to_string(getId()) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
     return output;
 }
 
 Watchable* Episode::getNextWatchable(Session & sess) const {
     if(nextEpisodeId < sess.getContent().size()){ // check if it is not the last Episode in content
         if(sess.getContent()[nextEpisodeId]->getName() == seriesName){ // check if it is not the last Episode in the serie
-            return sess.getContent()[nextEpisodeId];
+            return sess.getContent()[nextEpisodeId-1];
         }
         else
             sess.getActiveUser()->getRecommendation(sess);
@@ -154,7 +154,7 @@ std::string Episode::shortToString() const {
         printSeason = "0" + printSeason;
     if(episode < 10)
         printEpisode = "0" + printEpisode;
-    string output = to_string(getId()+1) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode;
+    string output = to_string(getId()) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode;
     return output;
 }
 

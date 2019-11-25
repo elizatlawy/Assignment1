@@ -233,11 +233,12 @@ void Watch::act(Session &sess) {
     string isAgreed = "y";
     int WatchableID = atoi(sess.getUserInputVector()[1].c_str());
     while(isAgreed == "y"){
-        //print "Watching <user_name> to the screen
+       // if the WatchableID is illegal
         if (WatchableID < 1 | WatchableID > sess.getContent().size() ){
             error("this content is not available on SPLFLIX");
             cout << toString() << endl;
         }
+            //print "Watching <user_name> to the screen
         else {
             string tempName = sess.getContent()[WatchableID-1]->shortToString();
             int firstSpace = tempName.find(" ");
@@ -249,18 +250,19 @@ void Watch::act(Session &sess) {
             if(nextRecommendation == nullptr){
                 error("Sorry, no recommendation was found for you :(");
                 cout << toString() << endl;
-                break;
             }
             firstSpace = nextRecommendation->shortToString().find(" ");
             cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace+1) << " ,continue watching?" << " [y/n]" << endl;
-            WatchableID = nextRecommendation->getId();
             complete();
-            cin >> isAgreed;
+            WatchableID = nextRecommendation->getId();
         }
-        // add the action to the actions log
         sess.addActionLog(*this);
+        cin >> isAgreed;
+        if(isAgreed == "no")
 
-    }
+        // add the action to the actions log
+
+    } // end of while
 
 }
 

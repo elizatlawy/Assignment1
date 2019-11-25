@@ -42,6 +42,7 @@ Session::~Session()
 void Session::start() {
     cout << "SPLFLIX is now on!" << endl;
     // TODO: DELETE latInputUser for session class
+    // TODO: CREATE ALL THE ACTION OBJECTS ONLY ONCE BEFORE THE WHILE.
     getline(cin,lastUserInput);
         while (lastUserInput != "exit"){
             std::istringstream iss(lastUserInput);
@@ -73,7 +74,6 @@ void Session::start() {
                 DeleteUser *DeleteUserAction = new DeleteUser();
                 DeleteUserAction->act(*this);
             }
-
             else if(userInputVector[0] == "watchhist") {
                 PrintWatchHistory *PrintWatchHistoryAction = new PrintWatchHistory();
                 PrintWatchHistoryAction->act(*this);
@@ -140,7 +140,7 @@ void Session::addToCurrentUserHistory(int id) {
 // inserts all movies form the Json file
 void Session::insertMovies(json &jsonFile) {
     json moviesJson = jsonFile["movies"];
-    int id = content.size();
+    int id = content.size()+1;
     for (auto& currMovie : moviesJson.items()) {
         json movie = currMovie.value();
         Movie *newMovie = new Movie(id, movie["name"], movie["length"], movie["tags"]);
@@ -152,7 +152,7 @@ void Session::insertMovies(json &jsonFile) {
 // inserts all series form the Json file
 void Session::insertSeries(json &jsonFile) {
     json seriesJson = jsonFile["tv_series"];
-    int id = content.size();
+    int id = content.size()+1;
     for (auto &currSerie : seriesJson.items()) {
         int seasonNumber = 1;
         json serie = currSerie.value();
