@@ -9,8 +9,16 @@ using namespace std;
 /*
  * #####################################User###################################
  */
-User::User(const string& name) : name(name){
-
+User::User(const string& name) : name(name){} // constructor
+User::User(const User &other) { // copy constructor
+    name = other.name;
+    for(int i = 0; i < other.history.size(); i++)
+        history.push_back(other.history.at(i));
+}
+User::User(User &&other) {
+    name = other.name;
+    history = other.history;
+    other.history.clear();
 }
 
 // getters
@@ -32,11 +40,37 @@ User::~User() {
 
 }
 
+User &User::operator=(const User &other) {
+    // if try copy this just return this
+    if(this == &other)
+        return *this;
+    // first destroy old history
+    history.clear();
+    name = other.name;
+    for(int i = 0; i < other.history.size(); i++)
+        history.push_back(other.history.at(i));
+    return *this;
+}
+
+User &User::operator=(User &&other) {
+    history.clear();
+    name = other.name;
+    for(int i = 0; i < other.history.size(); i++)
+        history.push_back(other.history.at(i));
+    other.history.clear();
+    return *this;
+}
+
 /*
  * ##########################LengthRecommenderUser###########################
  */
 // TODO: CHECK if all algo have a null condition
-LengthRecommenderUser::LengthRecommenderUser(const string& name) : User(name){}
+LengthRecommenderUser::LengthRecommenderUser(const string& name) : User(name){} // constructor
+User* LengthRecommenderUser::clone() {
+    LengthRecommenderUser* toReturn = new LengthRecommenderUser(this->getName());
+    for(int i = 0; i < this->history.size(); i++)
+        toReturn->history.push_back(this->history.at(i));
+}
 
 Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
 
@@ -77,7 +111,12 @@ Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
  * #####################RerunRecommenderUser########################
  */
 
-RerunRecommenderUser::RerunRecommenderUser(const string& name) : User(name), lastRecommandedIndex(0){}
+RerunRecommenderUser::RerunRecommenderUser(const string& name) : User(name), lastRecommandedIndex(0){} // constructor
+User* RerunRecommenderUser::clone() {
+    RerunRecommenderUser* toReturn = new RerunRecommenderUser(this->getName());
+    for(int i = 0; i < this->history.size(); i++)
+        toReturn->history.push_back(this->history.at(i));
+}
 
 Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
     if (lastRecommandedIndex = history.size())
@@ -92,6 +131,12 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
  */
 
 GenreRecommenderUser::GenreRecommenderUser(const string& name) : User(name){}
+
+User* GenreRecommenderUser::clone() {
+    GenreRecommenderUser* toReturn = new GenreRecommenderUser(this->getName());
+    for(int i = 0; i < this->history.size(); i++)
+        toReturn->history.push_back(this->history.at(i));
+}
 
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     //create 2 vectors -  the first holds the name of the tags and the second  holds the number of appearances in watchHistory

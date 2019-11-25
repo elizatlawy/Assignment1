@@ -151,20 +151,15 @@ void DuplicateUser::act(Session &sess) {
     if(sess.getUserMap().find(newUserName) != sess.getUserMap().end() & // if the new user name is no already taken
             (sess.getUserMap().find(originalUserName) == sess.getUserMap().end())){ // if the original user exits
         // TODO: creates new user + duplicate the old user history
-
-
-
-
+        User* newUser = sess.getUserMap().at(originalUserName)->clone();
+        sess.addUser(*newUser);
         complete();
     }
-
     else{
         error("the original user does not exits or the new user name is already taken");
         cout << toString() << endl;
     }
     sess.addActionLog(*this);
-
-
 
 }
 
