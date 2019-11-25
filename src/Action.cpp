@@ -148,8 +148,8 @@ void DuplicateUser::act(Session &sess) {
     string originalUserName = sess.getUserInputVector()[1];
     string newUserName = sess.getUserInputVector()[2];
     // check if the original user not exits & if the new user name is not already taken
-    if(sess.getUserMap().find(newUserName) != sess.getUserMap().end() & // if the new user name is no already taken
-            (sess.getUserMap().find(originalUserName) == sess.getUserMap().end())){ // if the original user exits
+    if(sess.getUserMap().find(newUserName) == sess.getUserMap().end() & // if the new user name is no already taken
+            (sess.getUserMap().find(originalUserName) != sess.getUserMap().end())){ // if the original user exits
         // TODO: creates new user + duplicate the old user history
         User* newUser = sess.getUserMap().at(originalUserName)->clone();
         sess.addUser(*newUser);

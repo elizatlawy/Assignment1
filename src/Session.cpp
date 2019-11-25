@@ -71,8 +71,8 @@ void Session::start() {
                 DeleteUserAction->act(*this);
             }
             else if(userInputVector[0] == "dupuser") {
-                DeleteUser *DeleteUserAction = new DeleteUser();
-                DeleteUserAction->act(*this);
+                DuplicateUser *DuplicateUserAction = new DuplicateUser();
+                DuplicateUserAction->act(*this);
             }
             else if(userInputVector[0] == "watchhist") {
                 PrintWatchHistory *PrintWatchHistoryAction = new PrintWatchHistory();
