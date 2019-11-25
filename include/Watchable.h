@@ -23,6 +23,10 @@ public:
 
     const std::vector<std::string> &getTags() const;
 
+    bool operator==(const Watchable &rhs) const;
+
+    bool operator!=(const Watchable &rhs) const;
+
     bool operator<(const Watchable &rhs) const;
 
     bool operator>(const Watchable &rhs) const;
@@ -30,10 +34,6 @@ public:
     bool operator<=(const Watchable &rhs) const;
 
     bool operator>=(const Watchable &rhs) const;
-
-    bool operator==(const Watchable &rhs) const;
-
-    bool operator!=(const Watchable &rhs) const;
 
 
 private:

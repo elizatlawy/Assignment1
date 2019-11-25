@@ -226,7 +226,7 @@ void Watch::act(Session &sess) {
         if (WatchableID < 1 | WatchableID > sess.getContent().size() ){
             error("this content is not available on SPLFLIX");
             cout << toString() << endl;
-            isAgreed = "n";
+            break;
         }
         // print "Watching <user_name> to the screen
         else {
@@ -240,7 +240,7 @@ void Watch::act(Session &sess) {
             if(nextRecommendation == nullptr){
                 error("Sorry, no recommendation was found for you :(");
                 cout << toString() << endl;
-                isAgreed = "n";
+                break;
             }
             firstSpace = nextRecommendation->shortToString().find(" ");
             cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace+1) << " ,continue watching?" << " [y/n]" << endl;

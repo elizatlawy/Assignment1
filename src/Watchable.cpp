@@ -34,6 +34,23 @@ bool Watchable::operator!=(const Watchable &rhs) const {
     return !(rhs == *this);
 }
 
+bool Watchable::operator<(const Watchable &rhs) const {
+    return length < rhs.length;
+}
+
+bool Watchable::operator>(const Watchable &rhs) const {
+    return rhs < *this;
+}
+
+bool Watchable::operator<=(const Watchable &rhs) const {
+    return !(rhs < *this);
+}
+
+bool Watchable::operator>=(const Watchable &rhs) const {
+    return !(*this < rhs);
+}
+
+
 /*
  *  ####################### Movie  #######################
  */
@@ -66,23 +83,6 @@ std::string Movie::shortToString() const {
     }
     string output = to_string(getId()) + ". " + name ;
     return output;
-}
-
-// relation operands
-bool Watchable::operator<(const Watchable &rhs) const {
-    return length < rhs.length;
-}
-
-bool Watchable::operator>(const Watchable &rhs) const {
-    return rhs < *this;
-}
-
-bool Watchable::operator<=(const Watchable &rhs) const {
-    return !(rhs < *this);
-}
-
-bool Watchable::operator>=(const Watchable &rhs) const {
-    return !(*this < rhs);
 }
 
 Watchable* Movie::getNextWatchable(Session& sess) const {

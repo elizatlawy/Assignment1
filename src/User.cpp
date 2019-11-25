@@ -4,6 +4,7 @@
 #include "../include/Session.h"
 #include <vector>
 #include <utility>
+#include <climits>
 using namespace std;
 
 /*
@@ -73,38 +74,27 @@ User* LengthRecommenderUser::clone() {
 }
 
 Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
-
-    double avrLenOfHistory;
+    Watchable* nextRecommendation = nullptr;
+    double distance = INT_MAX;
+    double avrLenOfHistory = 0 ;
     int sumOfAllContent = 0;
+    // calculate the average length in history
     for (Watchable *x : history) {
         sumOfAllContent = sumOfAllContent + x->getLength();
     }
     avrLenOfHistory = (double) (sumOfAllContent) / history.size();
-    vector<Watchable *> contentCopy = s.getContent();
-    // sort vector contentCopy
-    sort(contentCopy.begin(), contentCopy.end()); // TODO sort by length
-    int i = 0;
-    int j = contentCopy.size() - 1;
-    while (contentCopy[i]->getLength() < avrLenOfHistory) {
-        i++;
+    // find if watchContent is in history
+    for (auto& watchContent : s.getContent() ){
+        if(std::find(history.begin(), history.end(), watchContent) == history.end()) {
+            /* content does not contains watchContent */
+           double tmpDistance = abs((double)(watchContent->getLength()-avrLenOfHistory));
+           if(tmpDistance < distance){
+               nextRecommendation = watchContent;
+               distance = tmpDistance;
+           }
+        }
     }
-    while (contentCopy[j]->getLength() > avrLenOfHistory) {
-        j--;
-    }
-    // find the closest bigger length to avrLenOfHistory that is not in history
-    if (binary_search(history.begin(), history.end(), contentCopy[i]))
-        i--;
-    // find the closest lower length to avrLenOfHistory that is not in history
-    if (binary_search(history.begin(), history.end(), contentCopy[j]))
-        j++;
-    // find the minimum length between them
-    double resultLower = (double) (avrLenOfHistory) - contentCopy[i]->getLength();
-    double resultUpper = contentCopy[j]->getLength() - (double) (avrLenOfHistory);
-    int result;
-    if (resultLower < resultUpper)
-        return contentCopy[i];
-    else
-        return contentCopy[j];
+    return  nextRecommendation;
 }
 
 /*
@@ -119,6 +109,10 @@ User* RerunRecommenderUser::clone() {
 }
 
 Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
+    // if history is empty return null
+    if (get_history().size() == 0)
+        return nullptr;
+    // if we reached the end of history return to history begin
     if (lastRecommandedIndex = history.size())
         lastRecommandedIndex = 0;
     int tempIndex = lastRecommandedIndex;
