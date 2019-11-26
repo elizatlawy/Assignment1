@@ -119,6 +119,7 @@ User* RerunRecommenderUser::clone() {
     RerunRecommenderUser* toReturn = new RerunRecommenderUser(this->getName());
     for(int i = 0; i < this->history.size(); i++)
         toReturn->history.push_back(this->history.at(i));
+    return toReturn;
 }
 
 Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
@@ -136,6 +137,7 @@ User* GenreRecommenderUser::clone() {
     GenreRecommenderUser* toReturn = new GenreRecommenderUser(this->getName());
     for(int i = 0; i < this->history.size(); i++)
         toReturn->history.push_back(this->history.at(i));
+    return toReturn;
 }
 
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {

@@ -7,10 +7,6 @@ using namespace std;
 
 int main(int argc, char** argv){
 
-//    LengthRecommenderUser *eli = new LengthRecommenderUser("eli");
-//    User* nadav = (User)eli;
-//    delete eli;
-
 	if(argc!=2)
 	{
 		cout << "usage splflix input_file" << endl;
