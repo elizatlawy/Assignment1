@@ -56,11 +56,20 @@ User &User::operator=(const User &other) {
 User &User::operator=(User &&other) {
     history.clear();
     name = other.name;
-    for(int i = 0; i < other.history.size(); i++)
-        history.push_back(other.history.at(i));
+    this->copyHistory(other);
     other.history.clear();
     return *this;
 }
+
+void User::copyHistory(User &other) {
+    for(int i = 0; i < other.history.size(); i++)
+        history.push_back(other.history.at(i));
+}
+
+void User::setName(const string &name) {
+    User::name = name;
+}
+
 
 /*
  * ##########################LengthRecommenderUser###########################

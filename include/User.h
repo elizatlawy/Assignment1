@@ -18,16 +18,17 @@ public:
     User (User&& other); // // move constructor
     User& operator=(const User& other); // // copy assignment
     User& operator=( User&& other); //  move assignment
-
-
     virtual Watchable* getRecommendation(Session& s) = 0;
     std::string getName() const;
     std::vector<Watchable*> get_history() const;
     void addToHistory (Watchable& currWatchable);
+    void setName(const std::string &name);
 protected:
     std::vector<Watchable*> history;
 private:
     std::string name;
+    void copyHistory(User &other);
+
 };
 
 

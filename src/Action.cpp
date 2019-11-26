@@ -150,8 +150,11 @@ void DuplicateUser::act(Session &sess) {
     // check if the original user not exits & if the new user name is not already taken
     if(sess.getUserMap().find(newUserName) == sess.getUserMap().end() & // if the new user name is no already taken
             (sess.getUserMap().find(originalUserName) != sess.getUserMap().end())){ // if the original user exits
-        // TODO: creates new user + duplicate the old user history
+       // copy old user data to new user
         User* newUser = sess.getUserMap().at(originalUserName)->clone();
+        // set new user name
+        newUser->setName(newUserName);
+        // add the user to the userMap
         sess.addUser(*newUser);
         complete();
     }

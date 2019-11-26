@@ -43,6 +43,16 @@ void Session::start() {
     cout << "SPLFLIX is now on!" << endl;
     // TODO: DELETE latInputUser for session class
     // TODO: CREATE ALL THE ACTION OBJECTS ONLY ONCE BEFORE THE WHILE.
+    // create all possible action objects
+    CreateUser *createUserAction = new CreateUser();
+    PrintActionsLog *PrintActionLogAction = new PrintActionsLog();
+    PrintContentList *PrintContentListAction = new PrintContentList();
+    ChangeActiveUser *ChangeActiveUserAction = new ChangeActiveUser();
+    DeleteUser *DeleteUserAction = new DeleteUser();
+    DuplicateUser *DuplicateUserAction = new DuplicateUser();
+    PrintWatchHistory *PrintWatchHistoryAction = new PrintWatchHistory();
+    Watch *WatchAction = new Watch();
+
     getline(cin,lastUserInput);
         while (lastUserInput != "exit"){
             std::istringstream iss(lastUserInput);
@@ -51,35 +61,28 @@ void Session::start() {
             userInputVector = results;
             // all action options
             if(userInputVector[0] == "createuser"){
-                CreateUser *createUserAction = new CreateUser();
                 createUserAction->act(*this);
             }
-            else if(userInputVector[0] == "log"){
-                PrintActionsLog *PrintActionLogAction = new PrintActionsLog();
-                PrintActionLogAction->act(*this);
-            }
-            else if(userInputVector[0] == "content") {
-                PrintContentList *PrintContentListAction = new PrintContentList();
-                PrintContentListAction->act(*this);
-                }
             else if(userInputVector[0] == "changeuser") {
-                ChangeActiveUser *ChangeActiveUserAction = new ChangeActiveUser();
                 ChangeActiveUserAction->act(*this);
             }
             else if(userInputVector[0] == "deleteuser") {
-                DeleteUser *DeleteUserAction = new DeleteUser();
+
                 DeleteUserAction->act(*this);
             }
             else if(userInputVector[0] == "dupuser") {
-                DuplicateUser *DuplicateUserAction = new DuplicateUser();
                 DuplicateUserAction->act(*this);
             }
+            else if(userInputVector[0] == "log"){
+                PrintActionLogAction->act(*this);
+            }
+            else if(userInputVector[0] == "content") {
+                PrintContentListAction->act(*this);
+                }
             else if(userInputVector[0] == "watchhist") {
-                PrintWatchHistory *PrintWatchHistoryAction = new PrintWatchHistory();
                 PrintWatchHistoryAction->act(*this);
             }
             else if(userInputVector[0] == "watch") {
-                Watch *WatchAction = new Watch();
                 WatchAction->act(*this);
             }
             else{
