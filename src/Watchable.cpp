@@ -27,11 +27,11 @@ const vector<std::string> &Watchable::getTags() const {
 }
 
 bool Watchable::operator==(const Watchable &rhs) const {
-    return id == rhs.id;
+    return (id == rhs.id);
 }
 
 bool Watchable::operator!=(const Watchable &rhs) const {
-    return !(rhs == *this);
+    return (id != rhs.id);
 }
 
 /*

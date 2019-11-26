@@ -1,7 +1,6 @@
 
 #include "../include/User.h"
 #include "../include/Watchable.h"
-#include "../include/Session.h"
 #include "../include/Action.h"
 #include <sstream>
 #include <unordered_map>
@@ -30,8 +29,8 @@ Session::Session(const Session &other) {
     for(BaseAction* currAction : other.actionsLog)
          actionsLog.push_back(currAction->clone());
     for (pair<const basic_string<char>, User *> currUserPair : other.userMap)
-        userMap.insert(make_pair(currUserPair.first,currUserPair.second->clone()));
-    activeUser = other.activeUser->clone();
+        userMap.insert(make_pair(currUserPair.first,currUserPair.second->clone(*this)));
+    activeUser = other.activeUser->clone(*this);
 }
 //move constructor
 Session::Session(Session &&other) {
@@ -72,7 +71,7 @@ void Session::deleteSessResources() {
         delete currContent;
     for(BaseAction* currAction : actionsLog)
         delete currAction;
-    userInputVector.clear();
+    //userInputVector.clear();
 }
 void Session::CopySessResources(const Session &other) {
     for(Watchable* currContent : other.content)
@@ -90,6 +89,7 @@ void Session::start() {
     // TODO: DELETE latInputUser for session class
     // TODO: CREATE ALL THE ACTION OBJECTS ONLY ONCE BEFORE THE WHILE.
     // create all possible action objects
+    string lastUserInput;
     getline(cin,lastUserInput);
         while (lastUserInput != "exit"){
             std::istringstream iss(lastUserInput);
@@ -159,10 +159,6 @@ User *Session::getActiveUser() const {
     return activeUser;
 }
 
-const string &Session::getLastUserInput() const {
-    return lastUserInput;
-}
-
 // ################ Helper functions #################
 
 void Session::addUser(User &toAddUser) {
@@ -184,8 +180,6 @@ void Session::addActionLog(BaseAction &newAction) {
 void Session::addToCurrentUserHistory(int id) {
     activeUser->addToHistory(*content[id]);
 }
-
-
 
 // inserts all movies form the Json file
 void Session::insertMovies(json &jsonFile) {

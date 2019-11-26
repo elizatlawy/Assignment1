@@ -14,7 +14,7 @@ class User{
 public:
     User(const std::string& name); // constructor
     virtual ~User(); // destructor
-    virtual User* clone() = 0;
+    virtual User* clone(const Session& s) = 0;
     User (const User& other); // copy constructor
     User (User&& other); // // move constructor
     User& operator=(const User& other);  // copy assignment
@@ -30,6 +30,7 @@ private:
     std::string name;
     void copyHistory(const User &other);
 
+
 };
 
 
@@ -37,7 +38,7 @@ class LengthRecommenderUser : public User {
 public:
     LengthRecommenderUser(const std::string& name);
     virtual Watchable* getRecommendation(Session& s);
-    virtual User* clone();
+    virtual User* clone(const Session& s);
 
 private:
 
@@ -47,7 +48,7 @@ class RerunRecommenderUser : public User {
 public:
     RerunRecommenderUser(const std::string& name);
     virtual Watchable* getRecommendation(Session& s);
-    virtual User* clone();
+    virtual User* clone(const Session& s);
 
 private:
     int lastRecommandedIndex;
@@ -57,7 +58,7 @@ class GenreRecommenderUser : public User {
 public:
     GenreRecommenderUser(const std::string& name);
     virtual Watchable* getRecommendation(Session& s);
-    virtual User* clone();
+    virtual User* clone(const Session& s);
 
 private:
     vector<pair<string, int>> sortVectorTags(vector<pair<string, int>> tagsVector);

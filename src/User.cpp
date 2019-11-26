@@ -1,7 +1,5 @@
 
 #include "../include/Watchable.h"
-#include "../include/User.h"
-
 #include <vector>
 #include <utility>
 #include <climits>
@@ -26,7 +24,7 @@ User::User(User &&other) {
 // destructor
 User::~User() {
     // clear all history pointers
-    history.clear();
+    //history.clear();
 
 }
 // copy assignment
@@ -64,8 +62,9 @@ void User::addToHistory(Watchable &currWatchable) {
 }
 
 void User::copyHistory(const User &other) {
-    for(int i = 0; i < other.history.size(); i++)
-        history.push_back(other.history.at(i));
+    for(int i = 0; i < other.history.size(); i++){
+        history.push_back(other.history[i]);
+    }
 }
 
 void User::setName(const string &name) {
@@ -78,10 +77,12 @@ void User::setName(const string &name) {
  */
 // TODO: CHECK if all algo have a null condition
 LengthRecommenderUser::LengthRecommenderUser(const string& name) : User(name){} // constructor
-User* LengthRecommenderUser::clone() {
+User* LengthRecommenderUser::clone(const Session& s) {
     LengthRecommenderUser* toReturn = new LengthRecommenderUser(this->getName());
-    for(int i = 0; i < this->history.size(); i++)
-        toReturn->history.push_back(this->history.at(i));
+    for(int i = 0; i < this->history.size(); i++){
+        int currWatchableID = history[i]->getId();
+        toReturn->history.push_back(s.getContent()[currWatchableID-1]);
+    }
     return toReturn;
 }
 
@@ -115,10 +116,12 @@ Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
 
 RerunRecommenderUser::RerunRecommenderUser(const string& name) : User(name), lastRecommandedIndex(0){} // constructor
 
-User* RerunRecommenderUser::clone() {
+User* RerunRecommenderUser::clone(const Session& s) {
     RerunRecommenderUser* toReturn = new RerunRecommenderUser(this->getName());
-    for(int i = 0; i < this->history.size(); i++)
-        toReturn->history.push_back(this->history.at(i));
+    for(int i = 0; i < this->history.size(); i++){
+        int currWatchableID = history[i]->getId();
+        toReturn->history.push_back(s.getContent()[currWatchableID-1]);
+    }
     return toReturn;
 }
 
@@ -133,10 +136,12 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
 
 GenreRecommenderUser::GenreRecommenderUser(const string& name) : User(name){}
 
-User* GenreRecommenderUser::clone() {
+User* GenreRecommenderUser::clone(const Session& s) {
     GenreRecommenderUser* toReturn = new GenreRecommenderUser(this->getName());
-    for(int i = 0; i < this->history.size(); i++)
-        toReturn->history.push_back(this->history.at(i));
+    for(int i = 0; i < this->history.size(); i++){
+        int currWatchableID = history[i]->getId();
+        toReturn->history.push_back(s.getContent()[currWatchableID-1]);
+    }
     return toReturn;
 }
 

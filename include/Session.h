@@ -1,6 +1,5 @@
 #ifndef SESSION_H_
 #define SESSION_H_
-
 #include <vector>
 #include <unordered_map>
 #include <string>
@@ -30,8 +29,6 @@ public:
     const std::unordered_map<std::string, User *> &getUserMap() const;
 
     User *getActiveUser() const;
-
-    const std::string &getLastUserInput() const;
     void addUser (User& toAddUser);
     void addActionLog (BaseAction& newAction);
     void addToCurrentUserHistory (int id);
@@ -46,7 +43,6 @@ private:
     User* activeUser;
     void insertMovies (json& jsonFile);
     void insertSeries (json& jsonFile);
-    std::string lastUserInput;
     std::vector<std::string> userInputVector;
     void deleteSessResources();
     void CopySessResources(const Session &other);

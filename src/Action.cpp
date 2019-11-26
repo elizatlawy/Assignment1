@@ -61,7 +61,6 @@ std::string CreateUser::toString() const {
     return "CreateUser " + statusToString();
 }
 void CreateUser::act(Session &sess) {
-    string tmpUserInput = sess.getLastUserInput();
     string userName = sess.getUserInputVector()[1];
     string algoName = sess.getUserInputVector()[2];
     // user is not exist in UserMap
@@ -169,7 +168,7 @@ void DuplicateUser::act(Session &sess) {
     if(sess.getUserMap().find(newUserName) == sess.getUserMap().end() & // if the new user name is no already taken
             (sess.getUserMap().find(originalUserName) != sess.getUserMap().end())){ // if the original user exits
        // copy old user data to new user
-        User* newUser = sess.getUserMap().at(originalUserName)->clone();
+        User* newUser = sess.getUserMap().at(originalUserName)->clone(sess);
         // set new user name
         newUser->setName(newUserName);
         // add the user to the userMap
