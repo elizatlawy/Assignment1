@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
+using  namespace std;
 class Watchable;
 class Session;
 
@@ -59,7 +60,8 @@ public:
     virtual User* clone();
 
 private:
-
+    vector<pair<string, int>> sortVectorTags(vector<pair<string, int>> tagsVector);
+    vector<pair<string, int>> createVectorTags(Session &s);
 };
 
 #endif

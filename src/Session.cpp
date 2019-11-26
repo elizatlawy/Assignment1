@@ -140,8 +140,6 @@ void Session::start() {
         Exit *exitAction = new Exit();
         exitAction->act(*this);
         }
-        // TODO: call to delte on "exit" ?
-
 
 
 // Getters
