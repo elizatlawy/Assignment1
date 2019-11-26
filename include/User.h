@@ -16,7 +16,7 @@ public:
     virtual User* clone() = 0;
     User (const User& other); // copy constructor
     User (User&& other); // // move constructor
-    User& operator=(const User& other); // // copy assignment
+    User& operator=(const User& other);  // copy assignment
     User& operator=( User&& other); //  move assignment
     virtual Watchable* getRecommendation(Session& s) = 0;
     std::string getName() const;
@@ -27,7 +27,7 @@ protected:
     std::vector<Watchable*> history;
 private:
     std::string name;
-    void copyHistory(User &other);
+    void copyHistory(const User &other);
 
 };
 

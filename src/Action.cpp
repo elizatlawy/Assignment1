@@ -273,8 +273,13 @@ void PrintActionsLog::act(Session &sess) {
  * ################################ Exit ######################################
  */
 
-std::string Exit::toString() const {}
-void Exit::act(Session &sess) {}
+std::string Exit::toString() const {
+    return "Exit " + statusToString();
+}
+void Exit::act(Session &sess) {
+    complete();
+    sess.addActionLog(*this);
+}
 
 
 

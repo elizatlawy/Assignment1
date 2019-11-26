@@ -13,13 +13,37 @@ using namespace std;
 User::User(const string& name) : name(name){} // constructor
 User::User(const User &other) { // copy constructor
     name = other.name;
-    for(int i = 0; i < other.history.size(); i++)
-        history.push_back(other.history.at(i));
+    copyHistory(other);
 }
-User::User(User &&other) {
+User::User(User &&other) { // // move constructor
     name = other.name;
     history = other.history;
     other.history.clear();
+}
+
+
+User::~User() {
+    // clear all history pointers
+    history.clear();
+
+}
+
+User &User::operator=(const User &other) { // copy assignment
+    // if try copy this just return this
+    if(this == &other)
+        return *this;
+    // first destroy old history
+    history.clear();
+    name = other.name;
+    copyHistory(other);
+    return *this;
+}
+
+User &User::operator=(User &&other) { //  move assignment
+    history.clear();
+    copyHistory(other);
+    other.history.clear();
+    return *this;
 }
 
 // getters
@@ -35,33 +59,7 @@ void User::addToHistory(Watchable &currWatchable) {
     //TODO check if currWatchable is saved as reference to content
 }
 
-User::~User() {
-    // clear all history pointers
-    history.clear();
-
-}
-
-User &User::operator=(const User &other) {
-    // if try copy this just return this
-    if(this == &other)
-        return *this;
-    // first destroy old history
-    history.clear();
-    name = other.name;
-    for(int i = 0; i < other.history.size(); i++)
-        history.push_back(other.history.at(i));
-    return *this;
-}
-
-User &User::operator=(User &&other) {
-    history.clear();
-    name = other.name;
-    this->copyHistory(other);
-    other.history.clear();
-    return *this;
-}
-
-void User::copyHistory(User &other) {
+void User::copyHistory(const User &other) {
     for(int i = 0; i < other.history.size(); i++)
         history.push_back(other.history.at(i));
 }
@@ -80,6 +78,7 @@ User* LengthRecommenderUser::clone() {
     LengthRecommenderUser* toReturn = new LengthRecommenderUser(this->getName());
     for(int i = 0; i < this->history.size(); i++)
         toReturn->history.push_back(this->history.at(i));
+    return toReturn;
 }
 
 Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
