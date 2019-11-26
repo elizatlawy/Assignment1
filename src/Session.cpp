@@ -19,25 +19,72 @@ Session::Session(const string& configFilePath){
     json jsonFile = json::parse(i);
     insertMovies(jsonFile);
     insertSeries(jsonFile);
-    activeUser = new LengthRecommenderUser("default");
-    userMap.insert(make_pair("default",activeUser));
-
-} // end of sessions constructor
-
+    userMap.insert(make_pair("default",new LengthRecommenderUser("default")));
+    activeUser = userMap.at("default");
+}
 // copy constructor
 Session::Session(const Session &other) {
-
-//    for(auto& currContent : other.content)
-//        content.push_back(new Movie(currContent);
-//    for(auto& currActionLog : other.actionsLog)
-//        actionsLog.push_back(currActionLog);
-    // need to complete userMap + activeUser.
-
+// TODO: check if we pass value or reference
+    for(Watchable* currContent : other.content)
+        content.push_back(currContent->clone());
+    for(BaseAction* currAction : other.actionsLog)
+         actionsLog.push_back(currAction->clone());
+    for (pair<const basic_string<char>, User *> currUserPair : other.userMap)
+        userMap.insert(make_pair(currUserPair.first,currUserPair.second->clone()));
+    activeUser = other.activeUser->clone();
+}
+//move constructor
+Session::Session(Session &&other) {
+    CopySessResources(other);
+    other.content.clear();
+    other.actionsLog.clear();
+    other.userMap.clear();
+    delete other.activeUser;
+}
+// destructor
+Session::~Session(){
+    deleteSessResources();
+}
+// copy assignment
+Session& Session::operator=(const Session &other) {
+    // check for self assignment
+    if (this == &other)
+        return  *this;
+    // first destroy old resources
+    deleteSessResources();
+    // copy resources of other
+    CopySessResources(other);
+}
+//  move assignment
+Session& Session::operator=(Session &&other) {
+    // first destroy old resources
+    deleteSessResources();
+    // copy resources of other
+    CopySessResources(other);
+    // delete resources from other
+    other.deleteSessResources();
 }
 
-Session::~Session()
-{
+void Session::deleteSessResources() {
+    for (pair<const basic_string<char>, User *> currUserPair : userMap)
+        delete currUserPair.second;
+    delete activeUser; // TODO: CHECK IF needed
+    for(Watchable* currContent : content)
+        delete currContent;
+    for(BaseAction* currAction : actionsLog)
+        delete currAction;
+    userInputVector.clear();
 }
+void Session::CopySessResources(const Session &other) {
+    for(Watchable* currContent : other.content)
+        content.push_back(currContent);
+    for(BaseAction* currAction : other.actionsLog)
+        actionsLog.push_back(currAction);
+    for (pair<const basic_string<char>, User *> currUserPair : other.userMap)
+        userMap.insert(make_pair(currUserPair.first,currUserPair.second));
+    activeUser = other.activeUser;
+}
+
 
 void Session::start() {
     cout << "SPLFLIX is now on!" << endl;
@@ -176,4 +223,7 @@ void Session::insertSeries(json &jsonFile) {
 void Session::removeUser(std::string& userName) {
     userMap.erase(userName);
 }
+
+
+
 

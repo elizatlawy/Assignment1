@@ -12,7 +12,13 @@ using namespace std;
 
 // Constructors
 BaseAction::BaseAction(): errorMsg(""), status(PENDING) {}
-
+// copy constructor
+BaseAction::BaseAction(const BaseAction &other) {
+    errorMsg = other.errorMsg;
+    status = other.status;
+}
+// destructor
+BaseAction::~BaseAction() {}
 // public methods
 ActionStatus BaseAction::getStatus() const {
     return status;
@@ -47,7 +53,10 @@ std::string BaseAction::statusToString() const {
 /*
  * #####################################CreateUser##################################
  */
-
+BaseAction* CreateUser::clone() {
+    CreateUser* newCreateUser = new CreateUser(*this);
+    return newCreateUser;
+}
 std::string CreateUser::toString() const {
     return "CreateUser " + statusToString();
 }
@@ -92,7 +101,10 @@ void CreateUser::act(Session &sess) {
 /*
  * ############################ ChangeActiveUser ############################
  */
-
+BaseAction* ChangeActiveUser::clone() {
+    ChangeActiveUser* newChangeActiveUser = new ChangeActiveUser(*this);
+    return newChangeActiveUser;
+}
 std::string ChangeActiveUser::toString() const {
     return "ChangeUser " + statusToString();
 }
@@ -115,6 +127,10 @@ void ChangeActiveUser::act(Session &sess) {
 /*
  * ############################# DeleteUser #################################
  */
+BaseAction* DeleteUser::clone() {
+    DeleteUser* newDeleteUser = new DeleteUser (*this);
+    return newDeleteUser;
+}
 std::string DeleteUser::toString() const {
     return "DeleteUser " + statusToString();
 }
@@ -140,7 +156,10 @@ void DeleteUser::act(Session &sess) {
 /*
  * ############################## DuplicateUser ##############################
  */
-
+BaseAction* DuplicateUser::clone() {
+    DuplicateUser* newDuplicateUser = new DuplicateUser(*this);
+    return newDuplicateUser;
+}
 std::string DuplicateUser::toString() const {
     return "DuplicateUser " + statusToString();
 }
@@ -169,7 +188,10 @@ void DuplicateUser::act(Session &sess) {
 /*
  * ########################## PrintContentList ##############################
  */
-
+BaseAction* PrintContentList::clone() {
+    PrintContentList* newPrintContentList = new PrintContentList(*this);
+    return  newPrintContentList;
+}
 std::string PrintContentList::toString() const {
     return "Content " + statusToString();
 }
@@ -194,7 +216,10 @@ void PrintContentList::act(Session &sess) {
 /*
  *  ###################### ### PrintWatchHistory ############################
  */
-
+BaseAction* PrintWatchHistory::clone() {
+    PrintWatchHistory* newPrintWatchHistory = new PrintWatchHistory(*this);
+    return newPrintWatchHistory;
+}
 std::string PrintWatchHistory::toString() const {
     return "Watchhist " + statusToString();
 }
@@ -218,6 +243,10 @@ void PrintWatchHistory::act(Session &sess) {
 /*
  * ############################## Watch ######################################
  */
+BaseAction* Watch::clone() {
+    Watch* newWatch = new Watch(*this);
+    return newWatch;
+}
 std::string Watch::toString() const {
     return "Watch " + statusToString();
 }
@@ -263,7 +292,10 @@ void Watch::act(Session &sess) {
 /*
  * ########################### PrintActionsLog ###############################
  */
-
+BaseAction* PrintActionsLog::clone() {
+    PrintActionsLog* newPrintActionsLog = new PrintActionsLog(*this);
+    return newPrintActionsLog;
+}
 std::string PrintActionsLog::toString() const {
 // TODO ask forum
 }
@@ -276,7 +308,10 @@ void PrintActionsLog::act(Session &sess) {
 /*
  * ################################ Exit ######################################
  */
-
+BaseAction* Exit::clone() {
+    Exit* newExit = new Exit(*this);
+    return newExit;
+}
 std::string Exit::toString() const {
     return "Exit " + statusToString();
 }

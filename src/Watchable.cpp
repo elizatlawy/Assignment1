@@ -9,12 +9,13 @@ using namespace std;
 
 // Constructors
 Watchable::Watchable(long id, int length, const vector<string> &tags) : id(id), length(length), tags(tags) {}
-//std::string Watchable::toString() const {}
+std::string Watchable::toString() const {}
 Watchable* Watchable::getNextWatchable(Session & sess) const {}
-Watchable::~Watchable() {}
-
+// destructor
+Watchable::~Watchable() {
+    tags.clear();
+}
 // Getters
-
 const long Watchable::getId() const {
     return id;
 }
@@ -24,7 +25,6 @@ int Watchable::getLength() const {
 const vector<std::string> &Watchable::getTags() const {
     return tags;
 }
-
 
 bool Watchable::operator==(const Watchable &rhs) const {
     return id == rhs.id;
@@ -39,12 +39,15 @@ bool Watchable::operator!=(const Watchable &rhs) const {
  */
 // constructor
 Movie::Movie(long id, const string& name, int length, const vector<string>& tags) :  Watchable(id, length, tags), name(name) {}
-// copy constructor
-Movie::Movie(const Movie &other) :  Watchable(other.getId(), other.getLength(), other.getTags()), name(other.getName()) {}
+Watchable* Movie::clone() {
+    Movie* newMovie = new Movie (getId(), name, getLength(), getTags());
+    return newMovie;
+}
 // getters
 std::string Movie::getName() const {
     return name;
 }
+
 
 string Movie::toString() const {
     string tagsString = "";
@@ -75,9 +78,13 @@ Watchable* Movie::getNextWatchable(Session& sess) const {
 /*
  *  ####################### Episode  #######################
  */
+// constructor
 Episode::Episode(long id, const string& seriesName, int length, int season, int episode, const vector<string>& tags ) : Watchable(id, length, tags),
 seriesName(seriesName), season(season), episode(episode), nextEpisodeId((long)(id+1)){};
-
+Watchable* Episode::clone() {
+    Episode* newEpisode = new Episode (getId(), seriesName, getLength(), season, episode, getTags());
+    return newEpisode;
+}
 std::string Episode::getName() const {
     return seriesName;
 }

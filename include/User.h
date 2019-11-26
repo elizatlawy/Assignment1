@@ -12,7 +12,7 @@ class Session;
 class User{
 public:
     User(const std::string& name); // constructor
-    virtual ~User();
+    virtual ~User(); // destructor
     virtual User* clone() = 0;
     User (const User& other); // copy constructor
     User (User&& other); // // move constructor

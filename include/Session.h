@@ -15,8 +15,11 @@ class Watchable;
 class Session{
 public:
     Session(const std::string &configFilePath);
-    Session(const Session& other);
-    ~Session();
+    Session(const Session& other); // copy constructor
+    Session(Session&& other); // move constructor
+    ~Session(); // destructor
+    Session& operator=(const Session& other);  // copy assignment
+    Session& operator=( Session&& other); //  move assignment
 
     void start();
 
@@ -45,5 +48,7 @@ private:
     void insertSeries (json& jsonFile);
     std::string lastUserInput;
     std::vector<std::string> userInputVector;
+    void deleteSessResources();
+    void CopySessResources(const Session &other);
 };
 #endif

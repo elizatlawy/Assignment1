@@ -20,13 +20,11 @@ User::User(User &&other) { // move constructor
     history = other.history;
     other.history.clear();
 }
-
 User::~User() {
     // clear all history pointers
     history.clear();
 
 }
-
 User &User::operator=(const User &other) { // copy assignment
     // if try copy this just return this
     if(this == &other)
@@ -37,14 +35,14 @@ User &User::operator=(const User &other) { // copy assignment
     copyHistory(other);
     return *this;
 }
-
 User &User::operator=(User &&other) { //  move assignment
+    // first destroy old history
     history.clear();
     copyHistory(other);
+    // delete other history
     other.history.clear();
     return *this;
 }
-
 // getters
 Watchable* User::getRecommendation(Session &s) {}
 string User::getName() const {
