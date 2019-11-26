@@ -34,23 +34,6 @@ bool Watchable::operator!=(const Watchable &rhs) const {
     return !(rhs == *this);
 }
 
-bool Watchable::operator<(const Watchable &rhs) const {
-    return length < rhs.length;
-}
-
-bool Watchable::operator>(const Watchable &rhs) const {
-    return rhs < *this;
-}
-
-bool Watchable::operator<=(const Watchable &rhs) const {
-    return !(rhs < *this);
-}
-
-bool Watchable::operator>=(const Watchable &rhs) const {
-    return !(*this < rhs);
-}
-
-
 /*
  *  ####################### Movie  #######################
  */
@@ -129,8 +112,8 @@ string Episode::toString() const {
 }
 
 Watchable* Episode::getNextWatchable(Session & sess) const {
-    if(nextEpisodeId < sess.getContent().size()){ // check if it is not the last Episode in content
-        if(sess.getContent()[nextEpisodeId]->getName() == seriesName){ // check if it is not the last Episode in the serie
+    if(nextEpisodeId <= sess.getContent().size()){ // check if it is not the last Episode in content // TODO CHECK
+        if(sess.getContent()[nextEpisodeId-1]->getName() == seriesName){ // check if it is not the last Episode in the serie
             return sess.getContent()[nextEpisodeId-1];
         }
         else

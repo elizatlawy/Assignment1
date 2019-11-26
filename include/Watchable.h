@@ -27,15 +27,6 @@ public:
 
     bool operator!=(const Watchable &rhs) const;
 
-    bool operator<(const Watchable &rhs) const;
-
-    bool operator>(const Watchable &rhs) const;
-
-    bool operator<=(const Watchable &rhs) const;
-
-    bool operator>=(const Watchable &rhs) const;
-
-
 private:
     const long id;
     int length;

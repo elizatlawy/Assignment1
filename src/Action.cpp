@@ -239,20 +239,24 @@ void Watch::act(Session &sess) {
             // add to history
             sess.addToCurrentUserHistory(WatchableID-1);
             // recommend to the user what to see next
-            Watchable* nextRecommendation = sess.getActiveUser()->get_history()[sess.getActiveUser()->get_history().size()-1]->getNextWatchable(sess);
-            if(nextRecommendation == nullptr){
-                error("Sorry, no recommendation was found for you :(");
-                cout << toString() << endl;
+            Watchable *nextRecommendation = sess.getActiveUser()->get_history()[sess.getActiveUser()->get_history().size() - 1]->getNextWatchable(sess);
+            // not have recommendation for the user
+            if (nextRecommendation == nullptr){
+                cout << "Sorry, we do not have any recommendation for you" << endl;
                 break;
             }
+            // have recommendation for the user
+            else {
             firstSpace = nextRecommendation->shortToString().find(" ");
-            cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace+1) << " ,continue watching?" << " [y/n]" << endl;
+            cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace + 1)
+                 << " ,continue watching" << " [y/n]" << endl;
             complete();
             WatchableID = nextRecommendation->getId();
+            getline(cin,isAgreed);
+            }
         }
         // add the action to the actions log
         sess.addActionLog(*this);
-        getline(cin,isAgreed);
     } // end of while
 }
 

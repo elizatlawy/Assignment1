@@ -15,12 +15,11 @@ User::User(const User &other) { // copy constructor
     name = other.name;
     copyHistory(other);
 }
-User::User(User &&other) { // // move constructor
+User::User(User &&other) { // move constructor
     name = other.name;
     history = other.history;
     other.history.clear();
 }
-
 
 User::~User() {
     // clear all history pointers
@@ -110,6 +109,7 @@ Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
  */
 
 RerunRecommenderUser::RerunRecommenderUser(const string& name) : User(name), lastRecommandedIndex(0){} // constructor
+
 User* RerunRecommenderUser::clone() {
     RerunRecommenderUser* toReturn = new RerunRecommenderUser(this->getName());
     for(int i = 0; i < this->history.size(); i++)
@@ -117,17 +117,10 @@ User* RerunRecommenderUser::clone() {
 }
 
 Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
-    // if history is empty return null
-    if (get_history().size() == 0)
-        return nullptr;
-    // if we reached the end of history return to history begin
-    if (lastRecommandedIndex = history.size())
-        lastRecommandedIndex = 0;
     int tempIndex = lastRecommandedIndex;
-    lastRecommandedIndex++;
-    return history[tempIndex];
+    lastRecommandedIndex = (lastRecommandedIndex+1) % history.size();
+    return history [tempIndex];
 }
-
 /*
  * ########################GenreRecommenderUser#####################
  */
@@ -141,13 +134,13 @@ User* GenreRecommenderUser::clone() {
 }
 
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
-    //create 2 vectors -  the first holds the name of the tags and the second  holds the number of appearances in watchHistory
+    //create 2 vectors -  the first holds the name of the tags and the second holds the number of appearances in watchHistory
     vector<pair<string, int>> tagsVector;
     for (int i = 0; i < history.size(); i++) {
         for (int j = 0; j < history[i]->getTags().size(); j++) {
             string currTag = history[i]->getTags()[j];
             vector<pair<string, int>>::iterator itr = std::find(tagsVector.begin(), tagsVector.end(),
-                                                                make_pair(currTag, 0)); //TODO check if works
+                                                                make_pair(currTag, 0));
             if (itr != tagsVector.cend()) { //currTag is found
                 int index = distance(tagsVector.begin(), itr);
                 tagsVector[index].second++;
