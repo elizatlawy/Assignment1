@@ -17,6 +17,7 @@ User::User(const User &other) { // copy constructor
 }
 User::User(User &&other) { // move constructor
     name = other.name;
+    // todo: check if works
     history = other.history;
     other.history.clear();
 }
@@ -72,10 +73,10 @@ void User::setName(const string &name) {
 // TODO: CHECK if all algo have a null condition
 LengthRecommenderUser::LengthRecommenderUser(const string& name) : User(name){} // constructor
 User* LengthRecommenderUser::clone() {
-    LengthRecommenderUser* toReturn = new LengthRecommenderUser(this->getName());
+    LengthRecommenderUser* newUser = new LengthRecommenderUser(this->getName());
     for(int i = 0; i < this->history.size(); i++)
-        toReturn->history.push_back(this->history.at(i));
-    return toReturn;
+        newUser->history.push_back(this->history.at(i));
+    return newUser;
 }
 
 Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
@@ -109,9 +110,10 @@ Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
 RerunRecommenderUser::RerunRecommenderUser(const string& name) : User(name), lastRecommandedIndex(0){} // constructor
 
 User* RerunRecommenderUser::clone() {
-    RerunRecommenderUser* toReturn = new RerunRecommenderUser(this->getName());
+    RerunRecommenderUser* newUser = new RerunRecommenderUser(this->getName());
     for(int i = 0; i < this->history.size(); i++)
-        toReturn->history.push_back(this->history.at(i));
+        newUser->history.push_back(this->history.at(i));
+    return newUser;
 }
 
 Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
@@ -126,9 +128,10 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
 GenreRecommenderUser::GenreRecommenderUser(const string& name) : User(name){}
 
 User* GenreRecommenderUser::clone() {
-    GenreRecommenderUser* toReturn = new GenreRecommenderUser(this->getName());
+    GenreRecommenderUser* newUser = new GenreRecommenderUser(this->getName());
     for(int i = 0; i < this->history.size(); i++)
-        toReturn->history.push_back(this->history.at(i));
+        newUser->history.push_back(this->history.at(i));
+    return newUser;
 }
 
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {

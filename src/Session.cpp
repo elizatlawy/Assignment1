@@ -68,7 +68,6 @@ Session& Session::operator=(Session &&other) {
 void Session::deleteSessResources() {
     for (pair<const basic_string<char>, User *> currUserPair : userMap)
         delete currUserPair.second;
-    delete activeUser; // TODO: CHECK IF needed
     for(Watchable* currContent : content)
         delete currContent;
     for(BaseAction* currAction : actionsLog)
@@ -117,6 +116,7 @@ void Session::start() {
             else if(userInputVector[0] == "log"){
                 PrintActionsLog *PrintActionLogAction = new PrintActionsLog();
                 PrintActionLogAction->act(*this);
+                delete PrintActionLogAction;
             }
             else if(userInputVector[0] == "content") {
                 PrintContentList *PrintContentListAction = new PrintContentList();
@@ -129,6 +129,7 @@ void Session::start() {
             else if(userInputVector[0] == "watch") {
                 Watch *WatchAction = new Watch();
                 WatchAction->act(*this);
+                delete WatchAction;
             }
             else{
                 cout << "Illegal Command, Please Try Again" << endl;

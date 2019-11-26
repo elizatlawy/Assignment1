@@ -285,7 +285,7 @@ void Watch::act(Session &sess) {
             }
         }
         // add the action to the actions log
-        sess.addActionLog(*this);
+        sess.addActionLog(*this->clone());
     } // end of while
 }
 

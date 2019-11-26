@@ -61,12 +61,6 @@ string Movie::toString() const {
 } //
 
 std::string Movie::shortToString() const {
-    string tagsString = "";
-    string separator;
-    for(auto& tag: getTags()){
-        tagsString = tagsString + separator + tag;
-        separator = ", ";
-    }
     string output = to_string(getId()) + ". " + name ;
     return output;
 }
@@ -131,13 +125,6 @@ Watchable* Episode::getNextWatchable(Session & sess) const {
 }
 
 std::string Episode::shortToString() const {
-    string tagsString = "";
-    string separator;
-    // TODO: MAKE THIS Helper function
-    for(auto& tag: getTags()){
-        tagsString = tagsString + separator + tag;
-        separator = ", ";
-    }
     string printSeason = to_string(season);
     string printEpisode = to_string(episode);
     if (season < 10)

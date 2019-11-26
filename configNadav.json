@@ -1,0 +1,30 @@
+{
+  "movies": [
+    {
+      "name": "Lion king",
+      "length": 5,
+      "tags": [
+        "fantasy"
+      ]
+    },
+    {
+      "name": "The Dictator",
+      "length": 8,
+      "tags": [
+        "Action",
+        "Crime",
+        "Drama",
+        "Thriller"
+      ]
+    },
+    {
+      "name": "Pulp Fiction",
+      "length": 6,
+      "tags": [
+        "Crime",
+        "Drama"
+      ]
+    }
+  ]
+    }
+  
