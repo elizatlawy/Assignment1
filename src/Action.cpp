@@ -63,7 +63,6 @@ std::string CreateUser::toString() const {
 void CreateUser::act(Session &sess) {
     string tmpUserInput = sess.getLastUserInput();
     string userName = sess.getUserInputVector()[1];
-
     string algoName = sess.getUserInputVector()[2];
     // user is not exist in UserMap
     if(sess.getUserMap().find(userName) == sess.getUserMap().end()){
