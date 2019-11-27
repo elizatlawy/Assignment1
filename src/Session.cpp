@@ -12,7 +12,7 @@ using namespace std;
 using json = nlohmann::json;
 
 // constructor
-Session::Session(const string& configFilePath){
+Session::Session(const string& configFilePath): content(),actionsLog(), userMap(), activeUser(),userInputVector(){
     // construct content file
     ifstream i(configFilePath);
     json jsonFile = json::parse(i);
@@ -22,7 +22,7 @@ Session::Session(const string& configFilePath){
     activeUser = userMap.at("default");
 }
 // copy constructor
-Session::Session(const Session &other) {
+Session::Session(const Session &other):  content(),actionsLog(), userMap(), activeUser(),userInputVector() {
 // TODO: check if we pass value or reference
     for(Watchable* currContent : other.content)
         content.push_back(currContent->clone());
@@ -30,15 +30,17 @@ Session::Session(const Session &other) {
          actionsLog.push_back(currAction->clone());
     for (pair<const basic_string<char>, User *> currUserPair : other.userMap)
         userMap.insert(make_pair(currUserPair.first,currUserPair.second->clone(*this)));
-    activeUser = other.activeUser->clone(*this);
+    activeUser = other.activeUser;
 }
 //move constructor
-Session::Session(Session &&other) {
+Session::Session(Session &&other): content(),actionsLog(), userMap(), activeUser(),userInputVector() {
+    // copy resources of other
     CopySessResources(other);
+    // delete the references of other
     other.content.clear();
     other.actionsLog.clear();
     other.userMap.clear();
-    delete other.activeUser;
+    other.activeUser = nullptr;
 }
 // destructor
 Session::~Session(){
@@ -53,6 +55,7 @@ Session& Session::operator=(const Session &other) {
     deleteSessResources();
     // copy resources of other
     CopySessResources(other);
+    return *this;
 }
 //  move assignment
 Session& Session::operator=(Session &&other) {
@@ -60,12 +63,16 @@ Session& Session::operator=(Session &&other) {
     deleteSessResources();
     // copy resources of other
     CopySessResources(other);
-    // delete resources from other
-    other.deleteSessResources();
+    // delete the references of other
+    other.content.clear();
+    other.actionsLog.clear();
+    other.userMap.clear();
+    other.activeUser = nullptr;;
+    return *this;
 }
 
 void Session::deleteSessResources() {
-    for (pair<const basic_string<char>, User *> currUserPair : userMap)
+    for (const pair<const basic_string<char>, User *>& currUserPair : userMap)
         delete currUserPair.second;
     for(Watchable* currContent : content)
         delete currContent;
@@ -73,12 +80,13 @@ void Session::deleteSessResources() {
         delete currAction;
     //userInputVector.clear();
 }
+// copy others references
 void Session::CopySessResources(const Session &other) {
     for(Watchable* currContent : other.content)
         content.push_back(currContent);
     for(BaseAction* currAction : other.actionsLog)
         actionsLog.push_back(currAction);
-    for (pair<const basic_string<char>, User *> currUserPair : other.userMap)
+    for (const pair<const basic_string<char>, User *>& currUserPair : other.userMap)
         userMap.insert(make_pair(currUserPair.first,currUserPair.second));
     activeUser = other.activeUser;
 }
@@ -178,7 +186,7 @@ void Session::addActionLog(BaseAction &newAction) {
 }
 
 void Session::addToCurrentUserHistory(int id) {
-    activeUser->addToHistory(*content[id]);
+    activeUser->addToHistory(content[id]);
 }
 
 // inserts all movies form the Json file

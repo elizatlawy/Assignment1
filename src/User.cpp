@@ -8,16 +8,15 @@ using namespace std;
  * #####################################User###################################
  */
 // constructor
-User::User(const string& name) : name(name){}
+User::User(const string& name) : history(), name(name){}
 // copy constructor
-User::User(const User &other) {
-    name = other.name;
+User::User(const User &other): history(), name(other.name){
     copyHistory(other);
 }
 // move constructor
-User::User(User &&other) {
-    name = other.name;
-    history = other.history;
+User::User(User &&other): history(other.history), name(other.name){
+//    name = other.name;
+//    history = other.history;
     other.history.clear();
 }
 // destructor
@@ -47,7 +46,6 @@ User &User::operator=(User &&other) {
     return *this;
 }
 // getters
-Watchable* User::getRecommendation(Session &s) {}
 string User::getName() const {
     return name;
 }
@@ -55,20 +53,18 @@ vector<Watchable*> User::get_history() const {
     return  history;
 }
 // Helper Functions
-void User::addToHistory(Watchable &currWatchable) {
-    history.push_back(&currWatchable);
-    //TODO check if currWatchable is saved as reference to content
+void User::addToHistory(Watchable* currWatchable) {
+    history.push_back(currWatchable);
 }
 
 void User::copyHistory(const User &other) {
-    for(int i = 0; i < other.history.size(); i++)
+    for(int i = 0; i < (signed) other.history.size(); i++)
         history.push_back(other.history.at(i));
 }
 
 void User::setName(const string &name) {
     User::name = name;
 }
-
 
 /*
  * ##########################LengthRecommenderUser###########################
@@ -77,7 +73,7 @@ void User::setName(const string &name) {
 LengthRecommenderUser::LengthRecommenderUser(const string& name) : User(name){} // constructor
 User* LengthRecommenderUser::clone(const Session& s) {
     LengthRecommenderUser* toReturn = new LengthRecommenderUser(this->getName());
-    for(int i = 0; i < this->history.size(); i++){
+    for(int i = 0; i < (signed) this->history.size(); i++){
         int currWatchableID = history[i]->getId();
         toReturn->history.push_back(s.getContent()[currWatchableID-1]);
     }
@@ -116,7 +112,7 @@ RerunRecommenderUser::RerunRecommenderUser(const string& name) : User(name), las
 
 User* RerunRecommenderUser::clone(const Session& s) {
     RerunRecommenderUser* toReturn = new RerunRecommenderUser(this->getName());
-    for(int i = 0; i < this->history.size(); i++){
+    for(int i = 0; i < (signed) this->history.size(); i++){
         int currWatchableID = history[i]->getId();
         toReturn->history.push_back(s.getContent()[currWatchableID-1]);
     }
@@ -136,7 +132,7 @@ GenreRecommenderUser::GenreRecommenderUser(const string& name) : User(name){}
 
 User* GenreRecommenderUser::clone(const Session& s) {
     GenreRecommenderUser* toReturn = new GenreRecommenderUser(this->getName());
-    for(int i = 0; i < this->history.size(); i++){
+    for(int i = 0; i < (signed) this->history.size(); i++){
         int currWatchableID = history[i]->getId();
         toReturn->history.push_back(s.getContent()[currWatchableID-1]);
     }
@@ -152,11 +148,11 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     // return recommendation by most common tag
     // going over the sorted tags vector by decreasing order.
     Watchable* nextRecommendation = nullptr;
-    for (int i = 0; i < SortedTagsVector.size(); i++) {
+    for (int i = 0; i < (signed) SortedTagsVector.size(); i++) {
         // going over each watchable* in content
-        for (int j = 0; j < s.getContent().size(); j++) {
+        for (int j = 0; j < (signed) s.getContent().size(); j++) {
             // going over all tags of curr watchable*
-            for (int k = 0; k < s.getContent()[j]->getTags().size(); k++) {
+            for (int k = 0; k < (signed) s.getContent()[j]->getTags().size(); k++) {
                 string currTag = s.getContent()[j]->getTags()[k];
                 if (tagsVector[i].first == currTag) {
                     vector<Watchable *>::iterator itr = std::find(history.begin(), history.end(), s.getContent()[j]);
@@ -172,8 +168,8 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
 
 vector<pair<string, int>> GenreRecommenderUser::createVectorTags(Session &s) {
     vector<pair<string, int>> tagsVector;
-    for (int i = 0; i < history.size(); i++) {
-        for (int j = 0; j < history[i]->getTags().size(); j++) {
+    for (int i = 0; i < (signed) history.size(); i++) {
+        for (int j = 0; j < (signed) history[i]->getTags().size(); j++) {
             string currTag = history[i]->getTags()[j];
             auto itr = std::find_if( tagsVector.begin(), tagsVector.end(),
                                                       [&currTag](const pair<string, int>& element){ return element.first == currTag;} );

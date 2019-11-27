@@ -13,10 +13,7 @@ using namespace std;
 // Constructors
 BaseAction::BaseAction(): errorMsg(""), status(PENDING) {}
 // copy constructor
-BaseAction::BaseAction(const BaseAction &other) {
-    errorMsg = other.errorMsg;
-    status = other.status;
-}
+BaseAction::BaseAction(const BaseAction &other): errorMsg(other.errorMsg), status(other.status){}
 // destructor
 BaseAction::~BaseAction() {}
 // public methods
@@ -65,7 +62,7 @@ void CreateUser::act(Session &sess) {
     string algoName = sess.getUserInputVector()[2];
     // user is not exist in UserMap
     if(sess.getUserMap().find(userName) == sess.getUserMap().end()){
-        if(algoName == "len" | algoName == "rer" | algoName == "gen"){
+        if((algoName == "len") | (algoName == "rer") | (algoName == "gen")){
             if(algoName == "len"){
                 LengthRecommenderUser *toAddUser = new LengthRecommenderUser(userName);
                 sess.addUser(*toAddUser);
@@ -165,7 +162,7 @@ void DuplicateUser::act(Session &sess) {
     string originalUserName = sess.getUserInputVector()[1];
     string newUserName = sess.getUserInputVector()[2];
     // check if the original user not exits & if the new user name is not already taken
-    if(sess.getUserMap().find(newUserName) == sess.getUserMap().end() & // if the new user name is no already taken
+    if((sess.getUserMap().find(newUserName) == sess.getUserMap().end()) & // if the new user name is no already taken
             (sess.getUserMap().find(originalUserName) != sess.getUserMap().end())){ // if the original user exits
        // copy old user data to new user
         User* newUser = sess.getUserMap().at(originalUserName)->clone(sess);
@@ -253,7 +250,7 @@ void Watch::act(Session &sess) {
     int WatchableID = atoi(sess.getUserInputVector()[1].c_str());
     while(isAgreed == "y"){
        // if the WatchableID is illegal
-        if (WatchableID < 1 | WatchableID > sess.getContent().size() ){
+        if ((WatchableID < 1) | (WatchableID >(signed) sess.getContent().size()) ){
             error("this content is not available on SPLFLIX");
             cout << toString() << endl;
             break;
@@ -295,7 +292,7 @@ BaseAction* PrintActionsLog::clone() {
     return newPrintActionsLog;
 }
 std::string PrintActionsLog::toString() const {
-// TODO ask forum
+    return "ActionLog " + statusToString();
 }
 void PrintActionsLog::act(Session &sess) {
     for(int i = sess.getActionsLog().size()-1; i >=0; i--)

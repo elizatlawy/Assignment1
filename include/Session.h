@@ -15,10 +15,10 @@ class Session{
 public:
     Session(const std::string &configFilePath);
     Session(const Session& other); // copy constructor
-    Session(Session&& other); // move constructor
     ~Session(); // destructor
     Session& operator=(const Session& other);  // copy assignment
     Session& operator=( Session&& other); //  move assignment
+    Session(Session&& other); // move constructor
 
     void start();
 

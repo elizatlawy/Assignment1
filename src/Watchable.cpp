@@ -8,8 +8,6 @@ using namespace std;
 
 // Constructors
 Watchable::Watchable(long id, int length, const vector<string> &tags) : id(id), length(length), tags(tags) {}
-std::string Watchable::toString() const {}
-Watchable* Watchable::getNextWatchable(Session & sess) const {}
 // destructor
 Watchable::~Watchable() {
     tags.clear();
@@ -114,15 +112,15 @@ string Episode::toString() const {
 }
 
 Watchable* Episode::getNextWatchable(Session & sess) const {
-    if(nextEpisodeId <= sess.getContent().size()){ // check if it is not the last Episode in content // TODO CHECK
+    if(nextEpisodeId <= (signed) sess.getContent().size()){ // check if it is not the last Episode in content // TODO CHECK
         if(sess.getContent()[nextEpisodeId-1]->getName() == seriesName){ // check if it is not the last Episode in the serie
             return sess.getContent()[nextEpisodeId-1];
         }
         else
-            sess.getActiveUser()->getRecommendation(sess);
+            return sess.getActiveUser()->getRecommendation(sess);
     }
     else
-        sess.getActiveUser()->getRecommendation(sess);
+        return sess.getActiveUser()->getRecommendation(sess);
 }
 
 std::string Episode::shortToString() const {
