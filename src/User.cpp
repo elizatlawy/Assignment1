@@ -1,4 +1,3 @@
-
 #include "../include/Watchable.h"
 #include <vector>
 #include <utility>
@@ -62,9 +61,8 @@ void User::addToHistory(Watchable &currWatchable) {
 }
 
 void User::copyHistory(const User &other) {
-    for(int i = 0; i < other.history.size(); i++){
-        history.push_back(other.history[i]);
-    }
+    for(int i = 0; i < other.history.size(); i++)
+        history.push_back(other.history.at(i));
 }
 
 void User::setName(const string &name) {
@@ -146,14 +144,14 @@ User* GenreRecommenderUser::clone(const Session& s) {
 }
 
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
-    //create vector of pairs - the key holds the name of the tags and the key holds the number of appearances in watchHistory
-    vector<pair<string, int>> tagsVector;
-    tagsVector = createVectorTags(s);
+    // create tagsVector
+    vector<pair<string, int>> tagsVector = createVectorTags(s);
     // sort tagsVector first by value, then by key.
     vector<pair<string, int>> SortedTagsVector;
     SortedTagsVector = sortVectorTags(tagsVector);
+    // return recommendation by most common tag
     // going over the sorted tags vector by decreasing order.
-    for (int i = 0; i < tagsVector.size(); i++) {
+    for (int i = 0; i < SortedTagsVector.size(); i++) {
         // going over each watchable* in content
         for (int j = 0; j < s.getContent().size(); j++) {
             // going over all tags of curr watchable*
@@ -170,14 +168,13 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     }
 }
 
-
 vector<pair<string, int>> GenreRecommenderUser::createVectorTags(Session &s) {
     vector<pair<string, int>> tagsVector;
     for (int i = 0; i < history.size(); i++) {
         for (int j = 0; j < history[i]->getTags().size(); j++) {
             string currTag = history[i]->getTags()[j];
-            vector<pair<string, int>>::iterator itr = std::find(tagsVector.begin(), tagsVector.end(),
-                                                                make_pair(currTag, 0));
+            auto itr = std::find_if( tagsVector.begin(), tagsVector.end(),
+                                                      [&currTag](const pair<string, int>& element){ return element.first == currTag;} );
             if (itr != tagsVector.cend()) { //currTag is found
                 int index = distance(tagsVector.begin(), itr);
                 tagsVector[index].second++;

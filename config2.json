@@ -35,14 +35,14 @@
     {
       "name": "The End of the F***ing World ",
       "episode_length": 25,
-      "seasons": [8, 8],
+      "seasons": [8],
       "tags": ["Comedy", "Crime", "Drama"]
     },
     {
       "name": "Blue Planet II",
       "episode_length": 45,
       "seasons": [8],
-      "tags": ["Documentary", "Sea"]
+      "tags": ["drama", "animation"]
     }
   ]
 }

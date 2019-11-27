@@ -1,4 +1,3 @@
-
 #ifndef WATCHABLE_H_
 #define WATCHABLE_H_
 
@@ -6,8 +5,8 @@
 #include <vector>
 #include "../include/Session.h"
 #include "../include/User.h"
+using namespace std;
 
-class Session;
 
 class Watchable{
 public:
@@ -18,14 +17,11 @@ public:
     virtual std::string shortToString() const = 0;
     virtual std::string getName() const = 0;
     virtual Watchable* clone() = 0;
-
     const long getId() const;
     int getLength() const;
-
     const std::vector<std::string> &getTags() const;
 
     bool operator==(const Watchable &rhs) const;
-
     bool operator!=(const Watchable &rhs) const;
 
 private:
@@ -47,9 +43,7 @@ public:
 private:
     std::string name;
 
-
 };
-
 
 class Episode: public Watchable{
 public:

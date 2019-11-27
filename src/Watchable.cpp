@@ -1,4 +1,3 @@
-
 #include "../include/Watchable.h"
 #include <vector>
 using namespace std;
@@ -27,15 +26,15 @@ const vector<std::string> &Watchable::getTags() const {
 }
 
 bool Watchable::operator==(const Watchable &rhs) const {
-    return (id == rhs.id);
+    return id == rhs.id;
 }
 
 bool Watchable::operator!=(const Watchable &rhs) const {
-    return (id != rhs.id);
+    return id != rhs.id;
 }
 
 /*
- *  ####################### Movie  #######################
+ *  ###################################### Movie  ####################################
  */
 // constructor
 Movie::Movie(long id, const string& name, int length, const vector<string>& tags) :  Watchable(id, length, tags), name(name) {}
@@ -47,8 +46,7 @@ Watchable* Movie::clone() {
 std::string Movie::getName() const {
     return name;
 }
-
-
+// functions
 string Movie::toString() const {
     string tagsString = "";
     string separator;
@@ -58,7 +56,7 @@ string Movie::toString() const {
     }
     string output = to_string(getId()) + ". " + name + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
     return output;
-} //
+}
 
 std::string Movie::shortToString() const {
     string output = to_string(getId()) + ". " + name ;
@@ -70,7 +68,7 @@ Watchable* Movie::getNextWatchable(Session& sess) const {
 }
 
 /*
- *  ####################### Episode  #######################
+ *  ######################################### Episode  ##############################################
  */
 // constructor
 Episode::Episode(long id, const string& seriesName, int length, int season, int episode, const vector<string>& tags ) : Watchable(id, length, tags),
@@ -79,22 +77,25 @@ Watchable* Episode::clone() {
     Episode* newEpisode = new Episode (getId(), seriesName, getLength(), season, episode, getTags());
     return newEpisode;
 }
+// getters
 std::string Episode::getName() const {
     return seriesName;
 }
-
 int Episode::getSeason() const {
     return season;
 }
-
 int Episode::getEpisode() const {
     return episode;
 }
-
 long Episode::getNextEpisodeId() const {
     return nextEpisodeId;
 }
+// setters
+void Episode::setNextEpisodeId(long nextEpisodeId) {
+    Episode::nextEpisodeId = nextEpisodeId;
+}
 
+// functions
 string Episode::toString() const {
     string tagsString = "";
     string separator;
@@ -134,9 +135,3 @@ std::string Episode::shortToString() const {
     string output = to_string(getId()) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode;
     return output;
 }
-
-void Episode::setNextEpisodeId(long nextEpisodeId) {
-    Episode::nextEpisodeId = nextEpisodeId;
-}
-
-// end of Episode class

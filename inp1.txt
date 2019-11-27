@@ -11,3 +11,80 @@ y
 y
 n
 exit
+
+/users/studs/bsc/2020/kadurin/CLionProjects/SPL_Assignment/cmake-build-debug/Assignment1 ../config2.json
+SPLFLIX is now on!
+createuser Martsiano gen
+createuser Shalom len
+changeuser Martsiano
+content
+1. Scott Pilgrim vs. the World 112 minutes [Action, Comedy, Fantasy, Romance]
+
+2. Finding Nemo 100 minutes [Animation, Adventure, Family, Sea]
+
+3. The Dark Knight 152 minutes [Action, Crime, Drama, Thriller]
+
+4. Pulp Fiction 154 minutes [Crime, Drama]
+
+5. The End of the F***ing World  S01E01 25 minutes [Comedy, Crime, Drama]
+
+6. The End of the F***ing World  S01E02 25 minutes [Comedy, Crime, Drama]
+
+7. The End of the F***ing World  S01E03 25 minutes [Comedy, Crime, Drama]
+
+8. The End of the F***ing World  S01E04 25 minutes [Comedy, Crime, Drama]
+
+9. The End of the F***ing World  S01E05 25 minutes [Comedy, Crime, Drama]
+
+10. The End of the F***ing World  S01E06 25 minutes [Comedy, Crime, Drama]
+
+11. The End of the F***ing World  S01E07 25 minutes [Comedy, Crime, Drama]
+
+12. The End of the F***ing World  S01E08 25 minutes [Comedy, Crime, Drama]
+
+13. The End of the F***ing World  S02E01 25 minutes [Comedy, Crime, Drama]
+
+14. The End of the F***ing World  S02E02 25 minutes [Comedy, Crime, Drama]
+
+15. The End of the F***ing World  S02E03 25 minutes [Comedy, Crime, Drama]
+
+16. The End of the F***ing World  S02E04 25 minutes [Comedy, Crime, Drama]
+
+17. The End of the F***ing World  S02E05 25 minutes [Comedy, Crime, Drama]
+
+18. The End of the F***ing World  S02E06 25 minutes [Comedy, Crime, Drama]
+
+19. The End of the F***ing World  S02E07 25 minutes [Comedy, Crime, Drama]
+
+20. The End of the F***ing World  S02E08 25 minutes [Comedy, Crime, Drama]
+
+21. Blue Planet II S01E01 45 minutes [Documentary, Sea]
+
+22. Blue Planet II S01E02 45 minutes [Documentary, Sea]
+
+23. Blue Planet II S01E03 45 minutes [Documentary, Sea]
+
+24. Blue Planet II S01E04 45 minutes [Documentary, Sea]
+
+25. Blue Planet II S01E05 45 minutes [Documentary, Sea]
+
+26. Blue Planet II S01E06 45 minutes [Documentary, Sea]
+
+27. Blue Planet II S01E07 45 minutes [Documentary, Sea]
+
+28. Blue Planet II S01E08 45 minutes [Documentary, Sea]
+
+watch 2
+Watching Finding Nemo
+We recommend watching Blue Planet II S01E01 ,continue watching [y/n]
+y
+Watching Blue Planet II S01E01
+We recommend watching Blue Planet II S01E02 ,continue watching [y/n]
+y
+Watching Blue Planet II S01E02
+We recommend watching Blue Planet II S01E03 ,continue watching [y/n]
+n
+changeuser Shalom
+dupuser Martsiano eli
+
+Process finished with exit code 139 (interrupted by signal 11: SIGSEGV)

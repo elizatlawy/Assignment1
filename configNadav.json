@@ -4,17 +4,16 @@
       "name": "Lion king",
       "length": 5,
       "tags": [
-        "fantasy"
+        "family"
       ]
     },
     {
       "name": "The Dictator",
       "length": 8,
       "tags": [
-        "Action",
-        "Crime",
-        "Drama",
-        "Thriller"
+        "fantasy",
+        "comedy",
+        "Drama"
       ]
     },
     {
@@ -25,6 +24,21 @@
         "Drama"
       ]
     }
-  ]
+  ],
+  "tv_series":
+  [
+    {
+      "name": "game of thrones ",
+      "episode_length": 25,
+      "seasons": [8, 8],
+      "tags": ["fantasy", "Crime", "Drama"]
+    },
+    {
+      "name": "artur",
+      "episode_length": 45,
+      "seasons": [8],
+      "tags": ["animation", "family"]
     }
+  ]
+}
   
