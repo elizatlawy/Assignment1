@@ -116,6 +116,7 @@ User* RerunRecommenderUser::clone(const Session& s) {
         int currWatchableID = history[i]->getId();
         toReturn->history.push_back(s.getContent()[currWatchableID-1]);
     }
+    toReturn->lastRecommandedIndex = this->lastRecommandedIndex;
     return toReturn;
 }
 
