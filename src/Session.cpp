@@ -94,9 +94,6 @@ void Session::CopySessResources(const Session &other) {
 
 void Session::start() {
     cout << "SPLFLIX is now on!" << endl;
-    // TODO: DELETE latInputUser for session class
-    // TODO: CREATE ALL THE ACTION OBJECTS ONLY ONCE BEFORE THE WHILE.
-    // create all possible action objects
     string lastUserInput;
     getline(cin,lastUserInput);
         while (lastUserInput != "exit"){

@@ -123,7 +123,7 @@ void ChangeActiveUser::act(Session &sess) {
  * ############################# DeleteUser #################################
  */
 BaseAction* DeleteUser::clone() {
-    DeleteUser* newDeleteUser = new DeleteUser (*this);
+    auto* newDeleteUser = new DeleteUser (*this);
     return newDeleteUser;
 }
 std::string DeleteUser::toString() const {
@@ -152,7 +152,7 @@ void DeleteUser::act(Session &sess) {
  * ############################## DuplicateUser ##############################
  */
 BaseAction* DuplicateUser::clone() {
-    DuplicateUser* newDuplicateUser = new DuplicateUser(*this);
+    auto* newDuplicateUser = new DuplicateUser(*this);
     return newDuplicateUser;
 }
 std::string DuplicateUser::toString() const {
@@ -170,6 +170,7 @@ void DuplicateUser::act(Session &sess) {
         newUser->setName(newUserName);
         // add the user to the userMap
         sess.addUser(*newUser);
+        // TODO: CHANGE USERNAME
         complete();
     }
     else{
@@ -184,7 +185,7 @@ void DuplicateUser::act(Session &sess) {
  * ########################## PrintContentList ##############################
  */
 BaseAction* PrintContentList::clone() {
-    PrintContentList* newPrintContentList = new PrintContentList(*this);
+    auto* newPrintContentList = new PrintContentList(*this);
     return  newPrintContentList;
 }
 std::string PrintContentList::toString() const {
@@ -192,7 +193,7 @@ std::string PrintContentList::toString() const {
 }
 void PrintContentList::act(Session &sess) {
     //content is not empty
-    if (sess.getContent().size() != 0) {
+    if (!sess.getContent().empty()) {
         for (Watchable *currWatch : sess.getContent()) {
             cout << currWatch->toString() << endl;
             complete();
@@ -212,7 +213,7 @@ void PrintContentList::act(Session &sess) {
  *  ###################### ### PrintWatchHistory ############################
  */
 BaseAction* PrintWatchHistory::clone() {
-    PrintWatchHistory* newPrintWatchHistory = new PrintWatchHistory(*this);
+    auto* newPrintWatchHistory = new PrintWatchHistory(*this);
     return newPrintWatchHistory;
 }
 std::string PrintWatchHistory::toString() const {
@@ -221,11 +222,11 @@ std::string PrintWatchHistory::toString() const {
 void PrintWatchHistory::act(Session &sess) {
     // history is not empty
     cout << "Watch history for " << sess.getActiveUser()->getName() << endl;
-    if (sess.getActiveUser()->get_history().size() != 0) {
+    if (!sess.getActiveUser()->get_history().empty()) {
         int i = 1;
         for (Watchable *currWatch : sess.getActiveUser()->get_history()) {
             string tempName = currWatch->shortToString();
-            int firstSpace = tempName.find(" ");
+            int firstSpace = tempName.find(' ');
             cout << i << ". " << tempName.substr(firstSpace + 1) << endl;
             i++;
             complete();
@@ -258,7 +259,7 @@ void Watch::act(Session &sess) {
         // print "Watching <user_name> to the screen
         else {
             string tempName = sess.getContent()[WatchableID-1]->shortToString();
-            int firstSpace = tempName.find(" ");
+            int firstSpace = tempName.find(' ');
             cout << "Watching " << tempName.substr(firstSpace+1) << endl;
             // add to history
             sess.addToCurrentUserHistory(WatchableID-1);
@@ -271,11 +272,13 @@ void Watch::act(Session &sess) {
             }
             // have recommendation for the user
             else {
-            firstSpace = nextRecommendation->shortToString().find(" ");
+            firstSpace = nextRecommendation->shortToString().find(' ');
             cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace + 1)
                  << " ,continue watching" << " [y/n]" << endl;
             complete();
             WatchableID = nextRecommendation->getId();
+            // TODO: there is memory leak here!
+            //delete nextRecommendation;
             getline(cin,isAgreed);
             }
         }

@@ -20,6 +20,14 @@ int main(int argc, char** argv){
 	}
     Session* s = new Session(argv[1]);
     s->start();
+    Session* s3 = new Session(argv[1]);
+    Session s2 = *s;
+    delete(s);
+//    //s2.start();
+//    s3 = std::move(&s2);
+//    s3->start();
+
+
 //    Session* s2 = new Session(argv[1]);
 //    s2->start();
 //     s2 = s;
