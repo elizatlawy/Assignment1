@@ -124,7 +124,6 @@ void Session::start() {
             else if(userInputVector[0] == "log"){
                 PrintActionsLog *PrintActionLogAction = new PrintActionsLog();
                 PrintActionLogAction->act(*this);
-                delete PrintActionLogAction;
             }
             else if(userInputVector[0] == "content") {
                 PrintContentList *PrintContentListAction = new PrintContentList();
