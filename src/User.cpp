@@ -151,6 +151,7 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     SortedTagsVector = sortVectorTags(tagsVector);
     // return recommendation by most common tag
     // going over the sorted tags vector by decreasing order.
+    Watchable* nextRecommendation = nullptr;
     for (int i = 0; i < SortedTagsVector.size(); i++) {
         // going over each watchable* in content
         for (int j = 0; j < s.getContent().size(); j++) {
@@ -160,12 +161,13 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
                 if (tagsVector[i].first == currTag) {
                     vector<Watchable *>::iterator itr = std::find(history.begin(), history.end(), s.getContent()[j]);
                     if (itr == history.cend()) { //watchable* is not found
-                        return s.getContent()[j];
+                        nextRecommendation = s.getContent()[j];
                     }
                 }
             }
         }
     }
+    return nextRecommendation;
 }
 
 vector<pair<string, int>> GenreRecommenderUser::createVectorTags(Session &s) {
