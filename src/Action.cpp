@@ -298,6 +298,7 @@ void PrintActionsLog::act(Session &sess) {
     for(int i = sess.getActionsLog().size()-1; i >=0; i--)
         cout << sess.getActionsLog()[i]->toString() << endl;
     complete();
+    sess.addActionLog(*this);
 }
 
 /*
