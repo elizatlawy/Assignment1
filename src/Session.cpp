@@ -30,7 +30,7 @@ Session::Session(const Session &other):  content(),actionsLog(), userMap(), acti
          actionsLog.push_back(currAction->clone());
     for (pair<const basic_string<char>, User *> currUserPair : other.userMap)
         userMap.insert(make_pair(currUserPair.first,currUserPair.second->clone(*this)));
-    //activeUser = other.activeUser;
+    activeUser = userMap.at(other.getActiveUser()->getName());
 }
 //move constructor
 Session::Session(Session &&other): content(),actionsLog(), userMap(), activeUser(),userInputVector() {
@@ -79,7 +79,7 @@ void Session::deleteSessResources() {
         delete currContent;
     for(BaseAction* currAction : actionsLog)
         delete currAction;
-    //userInputVector.clear();
+    userInputVector.clear();
 }
 // copy others references
 void Session::CopySessResources(const Session &other) {
