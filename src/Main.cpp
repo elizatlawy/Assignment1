@@ -5,28 +5,27 @@
 
 using namespace std;
 
-int main(int argc, char** argv){
-	if(argc!=2)
-	{
-		cout << "usage splflix input_file" << endl;
-		return 0;
-	}
-    Session* s = new Session(argv[1]);
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        cout << "usage splflix input_file" << endl;
+        return 0;
+    }
+    Session *s = new Session(argv[1]);
     s->start();
     Session s2 = *s;
-    delete(s);
+    delete (s);
     s2.start();
 
     return 0;
 }
 
-void test(int argc, char** argv){
-    Session s =  Session(argv[1]);
+void test(int argc, char **argv) {
+    Session s = Session(argv[1]);
     s.start();
 //    Session* s3 = new Session(argv[1]);
     //Session* s2 = s; // copy constructor - - works!
     //Session s3(std::move(s2)); // move constructor - works!
-    Session s3 =  Session(argv[1]);
+    Session s3 = Session(argv[1]);
     s3.start();
     //s3 = std::move(s); // move assignment
     s3 = s; // copy assignment

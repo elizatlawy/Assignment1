@@ -1,5 +1,6 @@
 #include "../include/Watchable.h"
 #include <vector>
+
 using namespace std;
 
 /*
@@ -8,60 +9,61 @@ using namespace std;
 
 // Constructors
 Watchable::Watchable(long id, int length, const vector<string> &tags) : id(id), length(length), tags(tags) {}
+
 // destructor
 Watchable::~Watchable() {
     tags.clear();
 }
+
 // Getters
 const long Watchable::getId() const {
     return id;
 }
+
 int Watchable::getLength() const {
     return length;
 }
+
 const vector<std::string> &Watchable::getTags() const {
     return tags;
 }
-//
-//bool Watchable::operator==(const Watchable &rhs) const {
-//    return id == rhs.id;
-//}
-//
-//bool Watchable::operator!=(const Watchable &rhs) const {
-//    return id != rhs.id;
-//}
 
 /*
  *  ###################################### Movie  ####################################
  */
 // constructor
-Movie::Movie(long id, const string& name, int length, const vector<string>& tags) :  Watchable(id, length, tags), name(name) {}
-Watchable* Movie::clone() {
-    Movie* newMovie = new Movie (getId(), name, getLength(), getTags());
+Movie::Movie(long id, const string &name, int length, const vector<string> &tags) : Watchable(id, length, tags),
+                                                                                    name(name) {}
+
+Watchable *Movie::clone() {
+    Movie *newMovie = new Movie(getId(), name, getLength(), getTags());
     return newMovie;
 }
+
 // getters
 std::string Movie::getName() const {
     return name;
 }
+
 // functions
 string Movie::toString() const {
     string tagsString = "";
     string separator;
-    for(auto& tag: getTags()){
+    for (auto &tag: getTags()) {
         tagsString = tagsString + separator + tag;
         separator = ", ";
     }
-    string output = to_string(getId()) + ". " + name + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
+    string output =
+            to_string(getId()) + ". " + name + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
     return output;
 }
 
 std::string Movie::shortToString() const {
-    string output = to_string(getId()) + ". " + name ;
+    string output = to_string(getId()) + ". " + name;
     return output;
 }
 
-Watchable* Movie::getNextWatchable(Session& sess) const {
+Watchable *Movie::getNextWatchable(Session &sess) const {
     return sess.getActiveUser()->getRecommendation(sess);
 }
 
@@ -69,25 +71,32 @@ Watchable* Movie::getNextWatchable(Session& sess) const {
  *  ######################################### Episode  ##############################################
  */
 // constructor
-Episode::Episode(long id, const string& seriesName, int length, int season, int episode, const vector<string>& tags ) : Watchable(id, length, tags),
-seriesName(seriesName), season(season), episode(episode), nextEpisodeId((long)(id+1)){};
-Watchable* Episode::clone() {
-    Episode* newEpisode = new Episode (getId(), seriesName, getLength(), season, episode, getTags());
+Episode::Episode(long id, const string &seriesName, int length, int season, int episode, const vector<string> &tags)
+        : Watchable(id, length, tags),
+          seriesName(seriesName), season(season), episode(episode), nextEpisodeId((long) (id + 1)) {}
+
+Watchable *Episode::clone() {
+    Episode *newEpisode = new Episode(getId(), seriesName, getLength(), season, episode, getTags());
     return newEpisode;
 }
+
 // getters
 std::string Episode::getName() const {
     return seriesName;
 }
+
 int Episode::getSeason() const {
     return season;
 }
+
 int Episode::getEpisode() const {
     return episode;
 }
+
 long Episode::getNextEpisodeId() const {
     return nextEpisodeId;
 }
+
 // setters
 void Episode::setNextEpisodeId(long nextEpisodeId) {
     Episode::nextEpisodeId = nextEpisodeId;
@@ -97,7 +106,7 @@ void Episode::setNextEpisodeId(long nextEpisodeId) {
 string Episode::toString() const {
     string tagsString = "";
     string separator;
-    for(auto& tag: getTags()){
+    for (auto &tag: getTags()) {
         tagsString = tagsString + separator + tag;
         separator = ", ";
     }
@@ -105,21 +114,22 @@ string Episode::toString() const {
     string printEpisode = to_string(episode);
     if (season < 10)
         printSeason = "0" + printSeason;
-    if(episode < 10)
+    if (episode < 10)
         printEpisode = "0" + printEpisode;
-    string output = to_string(getId()) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode + " " + to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
+    string output = to_string(getId()) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode + " " +
+                    to_string(getLength()) + " minutes [" + tagsString + "]" + "\n";
     return output;
 }
 
-Watchable* Episode::getNextWatchable(Session & sess) const {
-    if(nextEpisodeId <= (signed) sess.getContent().size()){ // check if it is not the last Episode in content // TODO CHECK
-        if(sess.getContent()[nextEpisodeId-1]->getName() == seriesName){ // check if it is not the last Episode in the serie
-            return sess.getContent()[nextEpisodeId-1];
-        }
-        else
+Watchable *Episode::getNextWatchable(Session &sess) const {
+    if (nextEpisodeId <=
+        (signed) sess.getContent().size()) { // check if it is not the last Episode in content // TODO CHECK
+        if (sess.getContent()[nextEpisodeId - 1]->getName() ==
+            seriesName) { // check if it is not the last Episode in the serie
+            return sess.getContent()[nextEpisodeId - 1];
+        } else
             return sess.getActiveUser()->getRecommendation(sess);
-    }
-    else
+    } else
         return sess.getActiveUser()->getRecommendation(sess);
 }
 
@@ -128,7 +138,7 @@ std::string Episode::shortToString() const {
     string printEpisode = to_string(episode);
     if (season < 10)
         printSeason = "0" + printSeason;
-    if(episode < 10)
+    if (episode < 10)
         printEpisode = "0" + printEpisode;
     string output = to_string(getId()) + ". " + seriesName + " " + "S" + printSeason + "E" + printEpisode;
     return output;

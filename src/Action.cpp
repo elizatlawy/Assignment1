@@ -4,6 +4,7 @@
 #include "../include/User.h"
 #include <cstdlib>
 #include <vector>
+
 using namespace std;
 
 /*
@@ -11,36 +12,43 @@ using namespace std;
  */
 
 // Constructors
-BaseAction::BaseAction(): errorMsg(""), status(PENDING) {}
+BaseAction::BaseAction() : errorMsg(""), status(PENDING) {}
+
 // copy constructor
-BaseAction::BaseAction(const BaseAction &other): errorMsg(other.errorMsg), status(other.status){}
+BaseAction::BaseAction(const BaseAction &other) : errorMsg(other.errorMsg), status(other.status) {}
+
 // destructor
 BaseAction::~BaseAction() {}
+
 // public methods
 ActionStatus BaseAction::getStatus() const {
     return status;
 }
-void BaseAction::act(Session &sess)  {
+
+void BaseAction::act(Session &sess) {
 }
 
 string BaseAction::toString() const {
     return "";
 }
+
 // protected functions
 void BaseAction::complete() {
     status = COMPLETED;
 }
+
 void BaseAction::error(const std::string &errorMsg) {
     status = ERROR;
     BaseAction::errorMsg = errorMsg;
 
 }
+
 string BaseAction::getErrorMsg() const {
     return errorMsg;
 }
 
 std::string BaseAction::statusToString() const {
-    if(getStatus() == COMPLETED)
+    if (getStatus() == COMPLETED)
         return "COMPLETED";
     else
         return "ERROR: " + getErrorMsg();
@@ -50,40 +58,42 @@ std::string BaseAction::statusToString() const {
 /*
  * #####################################CreateUser##################################
  */
-BaseAction* CreateUser::clone() {
-    CreateUser* newCreateUser = new CreateUser(*this);
+BaseAction *CreateUser::clone() {
+    CreateUser *newCreateUser = new CreateUser(*this);
     return newCreateUser;
 }
+
 std::string CreateUser::toString() const {
     return "CreateUser " + statusToString();
 }
+
 void CreateUser::act(Session &sess) {
     string userName = sess.getUserInputVector()[1];
     string algoName = sess.getUserInputVector()[2];
     // user is not exist in UserMap
-    if(sess.getUserMap().find(userName) == sess.getUserMap().end()){
-        if((algoName == "len") | (algoName == "rer") | (algoName == "gen")){
-            if(algoName == "len"){
+    if (sess.getUserMap().find(userName) == sess.getUserMap().end()) {
+        if ((algoName == "len") | (algoName == "rer") | (algoName == "gen")) {
+            if (algoName == "len") {
                 LengthRecommenderUser *toAddUser = new LengthRecommenderUser(userName);
                 sess.addUser(*toAddUser);
             }
-            if(algoName == "rer"){
+            if (algoName == "rer") {
                 RerunRecommenderUser *toAddUser = new RerunRecommenderUser(userName);
                 sess.addUser(*toAddUser);
             }
-            if(algoName == "gen"){
+            if (algoName == "gen") {
                 GenreRecommenderUser *toAddUser = new GenreRecommenderUser(userName);
                 sess.addUser(*toAddUser);
             }
-           complete();
+            complete();
         }
-        // algo is incorrect
-        else{
+            // algo is incorrect
+        else {
             error("invalid recommendation algorithm");
             cout << toString() << endl;
         }
     } // user already exist
-    else{
+    else {
         error("the new user name is already taken");
         cout << toString() << endl;
     }
@@ -96,10 +106,11 @@ void CreateUser::act(Session &sess) {
 /*
  * ############################ ChangeActiveUser ############################
  */
-BaseAction* ChangeActiveUser::clone() {
-    ChangeActiveUser* newChangeActiveUser = new ChangeActiveUser(*this);
+BaseAction *ChangeActiveUser::clone() {
+    ChangeActiveUser *newChangeActiveUser = new ChangeActiveUser(*this);
     return newChangeActiveUser;
 }
+
 std::string ChangeActiveUser::toString() const {
     return "ChangeUser " + statusToString();
 }
@@ -107,12 +118,12 @@ std::string ChangeActiveUser::toString() const {
 void ChangeActiveUser::act(Session &sess) {
     string userNameToChange = sess.getUserInputVector()[1];
     // if the user exist
-    if(sess.getUserMap().find(userNameToChange) != sess.getUserMap().end()){
+    if (sess.getUserMap().find(userNameToChange) != sess.getUserMap().end()) {
         sess.setActiveUser(*sess.getUserMap().at(userNameToChange));
         complete();
     }
-    // if the user does not exist in UserMap
-    else{
+        // if the user does not exist in UserMap
+    else {
         error("the user you have entered does not exist");
         cout << toString() << endl;
     }
@@ -122,25 +133,27 @@ void ChangeActiveUser::act(Session &sess) {
 /*
  * ############################# DeleteUser #################################
  */
-BaseAction* DeleteUser::clone() {
-    auto* newDeleteUser = new DeleteUser (*this);
+BaseAction *DeleteUser::clone() {
+    auto *newDeleteUser = new DeleteUser(*this);
     return newDeleteUser;
 }
+
 std::string DeleteUser::toString() const {
     return "DeleteUser " + statusToString();
 }
+
 void DeleteUser::act(Session &sess) {
     // TODO STILL NEED TO CHECK IT WAIT FOR Nadva Watch function
     string userNameToDelete = sess.getUserInputVector()[1];
     // if the user exist
-    if(sess.getUserMap().find(userNameToDelete) != sess.getUserMap().end()){
+    if (sess.getUserMap().find(userNameToDelete) != sess.getUserMap().end()) {
         delete sess.getUserMap().at(userNameToDelete);
         // remove the user from userMap
         sess.removeUser(userNameToDelete);
         complete();
     }
-    // if the user does not exist in UserMap
-    else{
+        // if the user does not exist in UserMap
+    else {
         error("the user you have entered does not exist");
         cout << toString() << endl;
     }
@@ -151,29 +164,30 @@ void DeleteUser::act(Session &sess) {
 /*
  * ############################## DuplicateUser ##############################
  */
-BaseAction* DuplicateUser::clone() {
-    auto* newDuplicateUser = new DuplicateUser(*this);
+BaseAction *DuplicateUser::clone() {
+    auto *newDuplicateUser = new DuplicateUser(*this);
     return newDuplicateUser;
 }
+
 std::string DuplicateUser::toString() const {
     return "DuplicateUser " + statusToString();
 }
+
 void DuplicateUser::act(Session &sess) {
     string originalUserName = sess.getUserInputVector()[1];
     string newUserName = sess.getUserInputVector()[2];
     // check if the original user not exits & if the new user name is not already taken
-    if((sess.getUserMap().find(newUserName) == sess.getUserMap().end()) & // if the new user name is no already taken
-            (sess.getUserMap().find(originalUserName) != sess.getUserMap().end())){ // if the original user exits
-       // copy old user data to new user
-        User* newUser = sess.getUserMap().at(originalUserName)->clone(sess);
+    if ((sess.getUserMap().find(newUserName) == sess.getUserMap().end()) & // if the new user name is no already taken
+        (sess.getUserMap().find(originalUserName) != sess.getUserMap().end())) { // if the original user exits
+        // copy old user data to new user
+        User *newUser = sess.getUserMap().at(originalUserName)->clone(sess);
         // set new user name
         newUser->setName(newUserName);
         // add the user to the userMap
         sess.addUser(*newUser);
         // TODO: CHANGE USERNAME
         complete();
-    }
-    else{
+    } else {
         error("the original user does not exits or the new user name is already taken");
         cout << toString() << endl;
     }
@@ -184,13 +198,15 @@ void DuplicateUser::act(Session &sess) {
 /*
  * ########################## PrintContentList ##############################
  */
-BaseAction* PrintContentList::clone() {
-    auto* newPrintContentList = new PrintContentList(*this);
-    return  newPrintContentList;
+BaseAction *PrintContentList::clone() {
+    auto *newPrintContentList = new PrintContentList(*this);
+    return newPrintContentList;
 }
+
 std::string PrintContentList::toString() const {
     return "Content " + statusToString();
 }
+
 void PrintContentList::act(Session &sess) {
     //content is not empty
     if (!sess.getContent().empty()) {
@@ -199,7 +215,7 @@ void PrintContentList::act(Session &sess) {
             complete();
         }
     }
-    // content is empty
+        // content is empty
     else {
         error("there is no content available right now, please try again later");
         cout << toString() << endl;
@@ -212,13 +228,15 @@ void PrintContentList::act(Session &sess) {
 /*
  *  ###################### ### PrintWatchHistory ############################
  */
-BaseAction* PrintWatchHistory::clone() {
-    auto* newPrintWatchHistory = new PrintWatchHistory(*this);
+BaseAction *PrintWatchHistory::clone() {
+    auto *newPrintWatchHistory = new PrintWatchHistory(*this);
     return newPrintWatchHistory;
 }
+
 std::string PrintWatchHistory::toString() const {
     return "Watchhist " + statusToString();
 }
+
 void PrintWatchHistory::act(Session &sess) {
     // history is not empty
     cout << "Watch history for " << sess.getActiveUser()->getName() << endl;
@@ -239,47 +257,50 @@ void PrintWatchHistory::act(Session &sess) {
 /*
  * ############################## Watch ######################################
  */
-BaseAction* Watch::clone() {
-    Watch* newWatch = new Watch(*this);
+BaseAction *Watch::clone() {
+    Watch *newWatch = new Watch(*this);
     return newWatch;
 }
+
 std::string Watch::toString() const {
     return "Watch " + statusToString();
 }
+
 void Watch::act(Session &sess) {
     string isAgreed = "y";
     int WatchableID = atoi(sess.getUserInputVector()[1].c_str());
-    while(isAgreed == "y"){
-       // if the WatchableID is illegal
-        if ((WatchableID < 1) | (WatchableID >(signed) sess.getContent().size()) ){
+    while (isAgreed == "y") {
+        // if the WatchableID is illegal
+        if ((WatchableID < 1) | (WatchableID > (signed) sess.getContent().size())) {
             error("this content is not available on SPLFLIX");
             cout << toString() << endl;
             break;
         }
-        // print "Watching <user_name> to the screen
+            // print "Watching <user_name> to the screen
         else {
-            string tempName = sess.getContent()[WatchableID-1]->shortToString();
+            string tempName = sess.getContent()[WatchableID - 1]->shortToString();
             int firstSpace = tempName.find(' ');
-            cout << "Watching " << tempName.substr(firstSpace+1) << endl;
+            cout << "Watching " << tempName.substr(firstSpace + 1) << endl;
             // add to history
             //sess.getActiveUser()->get_history().push_back(sess.getContent()[WatchableID-1]);
-            sess.addToCurrentUserHistory(WatchableID-1);
+            sess.addToCurrentUserHistory(WatchableID - 1);
             // recommend to the user what to see next
-            Watchable *nextRecommendation = sess.getActiveUser()->get_history()[sess.getActiveUser()->get_history().size() - 1]->getNextWatchable(sess);
+            Watchable *nextRecommendation = sess.getActiveUser()->get_history()[
+                    sess.getActiveUser()->get_history().size() - 1]->getNextWatchable(sess);
             // not have recommendation for the user
-            if (nextRecommendation == nullptr){
+            if (nextRecommendation == nullptr) {
                 cout << "Sorry, we do not have any recommendation for you" << endl;
                 break;
             }
-            // have recommendation for the user
+                // have recommendation for the user
             else {
-            firstSpace = nextRecommendation->shortToString().find(' ');
-            cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace + 1)
-                 << " ,continue watching" << " [y/n]" << endl;
-            complete();
-            WatchableID = nextRecommendation->getId();
-            // TODO: there is memory leak here!
-            getline(cin,isAgreed);
+                firstSpace = nextRecommendation->shortToString().find(' ');
+                cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace + 1)
+                     << " ,continue watching" << " [y/n]" << endl;
+                complete();
+                WatchableID = nextRecommendation->getId();
+                // TODO: there is memory leak here!
+                getline(cin, isAgreed);
             }
         }
         // add the action to the actions log
@@ -290,15 +311,17 @@ void Watch::act(Session &sess) {
 /*
  * ########################### PrintActionsLog ###############################
  */
-BaseAction* PrintActionsLog::clone() {
-    PrintActionsLog* newPrintActionsLog = new PrintActionsLog(*this);
+BaseAction *PrintActionsLog::clone() {
+    PrintActionsLog *newPrintActionsLog = new PrintActionsLog(*this);
     return newPrintActionsLog;
 }
+
 std::string PrintActionsLog::toString() const {
     return "ActionLog " + statusToString();
 }
+
 void PrintActionsLog::act(Session &sess) {
-    for(int i = sess.getActionsLog().size()-1; i >=0; i--)
+    for (int i = sess.getActionsLog().size() - 1; i >= 0; i--)
         cout << sess.getActionsLog()[i]->toString() << endl;
     complete();
     sess.addActionLog(*this);
@@ -307,13 +330,15 @@ void PrintActionsLog::act(Session &sess) {
 /*
  * ################################ Exit ######################################
  */
-BaseAction* Exit::clone() {
-    Exit* newExit = new Exit(*this);
+BaseAction *Exit::clone() {
+    Exit *newExit = new Exit(*this);
     return newExit;
 }
+
 std::string Exit::toString() const {
     return "Exit " + statusToString();
 }
+
 void Exit::act(Session &sess) {
     complete();
     sess.addActionLog(*this);
