@@ -25,8 +25,8 @@ ActionStatus BaseAction::getStatus() const {
     return status;
 }
 
-void BaseAction::act(Session &sess) {
-}
+//void BaseAction::act(Session &sess) {
+//}
 
 string BaseAction::toString() const {
     return "";
@@ -143,7 +143,6 @@ std::string DeleteUser::toString() const {
 }
 
 void DeleteUser::act(Session &sess) {
-    // TODO STILL NEED TO CHECK IT WAIT FOR Nadva Watch function
     string userNameToDelete = sess.getUserInputVector()[1];
     // if the user exist
     if (sess.getUserMap().find(userNameToDelete) != sess.getUserMap().end()) {
@@ -185,7 +184,6 @@ void DuplicateUser::act(Session &sess) {
         newUser->setName(newUserName);
         // add the user to the userMap
         sess.addUser(*newUser);
-        // TODO: CHANGE USERNAME
         complete();
     } else {
         error("the original user does not exits or the new user name is already taken");
@@ -215,7 +213,7 @@ void PrintContentList::act(Session &sess) {
             complete();
         }
     }
-        // content is empty
+    // content is empty
     else {
         error("there is no content available right now, please try again later");
         cout << toString() << endl;
@@ -238,8 +236,8 @@ std::string PrintWatchHistory::toString() const {
 }
 
 void PrintWatchHistory::act(Session &sess) {
-    // history is not empty
     cout << "Watch history for " << sess.getActiveUser()->getName() << endl;
+    // history is not empty
     if (!sess.getActiveUser()->get_history().empty()) {
         int i = 1;
         for (Watchable *currWatch : sess.getActiveUser()->get_history()) {
@@ -276,13 +274,12 @@ void Watch::act(Session &sess) {
             cout << toString() << endl;
             break;
         }
-            // print "Watching <user_name> to the screen
         else {
+            // print "Watching <user_name> to the screen
             string tempName = sess.getContent()[WatchableID - 1]->shortToString();
             int firstSpace = tempName.find(' ');
             cout << "Watching " << tempName.substr(firstSpace + 1) << endl;
             // add to history
-            //sess.getActiveUser()->get_history().push_back(sess.getContent()[WatchableID-1]);
             sess.addToCurrentUserHistory(WatchableID - 1);
             // recommend to the user what to see next
             Watchable *nextRecommendation = sess.getActiveUser()->get_history()[
@@ -299,7 +296,6 @@ void Watch::act(Session &sess) {
                      << " ,continue watching" << " [y/n]" << endl;
                 complete();
                 WatchableID = nextRecommendation->getId();
-                // TODO: there is memory leak here!
                 getline(cin, isAgreed);
             }
         }
@@ -307,7 +303,6 @@ void Watch::act(Session &sess) {
         sess.addActionLog(*this->clone());
     } // end of while
 }
-
 /*
  * ########################### PrintActionsLog ###############################
  */

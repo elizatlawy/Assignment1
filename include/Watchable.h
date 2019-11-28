@@ -67,14 +67,6 @@ public:
 
     virtual Watchable *clone();
 
-    int getSeason() const;
-
-    int getEpisode() const;
-
-    long getNextEpisodeId() const;
-
-    void setNextEpisodeId(long nextEpisodeId);
-
 private:
     std::string seriesName;
     int season;

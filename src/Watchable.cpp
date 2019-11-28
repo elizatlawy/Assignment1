@@ -85,23 +85,6 @@ std::string Episode::getName() const {
     return seriesName;
 }
 
-int Episode::getSeason() const {
-    return season;
-}
-
-int Episode::getEpisode() const {
-    return episode;
-}
-
-long Episode::getNextEpisodeId() const {
-    return nextEpisodeId;
-}
-
-// setters
-void Episode::setNextEpisodeId(long nextEpisodeId) {
-    Episode::nextEpisodeId = nextEpisodeId;
-}
-
 // functions
 string Episode::toString() const {
     string tagsString = "";
@@ -123,7 +106,7 @@ string Episode::toString() const {
 
 Watchable *Episode::getNextWatchable(Session &sess) const {
     if (nextEpisodeId <=
-        (signed) sess.getContent().size()) { // check if it is not the last Episode in content // TODO CHECK
+        (signed) sess.getContent().size()) { // check if it is not the last Episode in content
         if (sess.getContent()[nextEpisodeId - 1]->getName() ==
             seriesName) { // check if it is not the last Episode in the serie
             return sess.getContent()[nextEpisodeId - 1];

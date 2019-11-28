@@ -49,7 +49,6 @@ void User::setName(const string &name) {
 /*
  * ##########################LengthRecommenderUser###########################
  */
-// TODO: CHECK if all algo have a null condition
 LengthRecommenderUser::LengthRecommenderUser(const string &name) : User(name) {} // constructor
 User *LengthRecommenderUser::clone(const Session &s) {
     LengthRecommenderUser *toReturn = new LengthRecommenderUser(this->getName());
