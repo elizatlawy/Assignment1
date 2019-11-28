@@ -23,38 +23,27 @@ Session::Session(const string& configFilePath): content(),actionsLog(), userMap(
 }
 // copy constructor
 Session::Session(const Session &other):  content(),actionsLog(), userMap(), activeUser(),userInputVector() {
-// TODO: check if we pass value or reference
-    for(Watchable* currContent : other.content)
-        content.push_back(currContent->clone());
-    for(BaseAction* currAction : other.actionsLog)
-         actionsLog.push_back(currAction->clone());
-    for (pair<const basic_string<char>, User *> currUserPair : other.userMap)
-        userMap.insert(make_pair(currUserPair.first,currUserPair.second->clone(*this)));
-    activeUser = userMap.at(other.getActiveUser()->getName());
+    copySessResources(other);
 }
 //move constructor
 Session::Session(Session &&other): content(),actionsLog(), userMap(), activeUser(),userInputVector() {
     // copy resources of other
-    CopySessResources(other);
+    stealSessResources(other);
     // delete the references of other
-    other.content.clear();
-    other.actionsLog.clear();
-    other.userMap.clear();
-    other.activeUser = nullptr;
 }
 // destructor
 Session::~Session(){
     deleteSessResources();
 }
 // copy assignment
-Session& Session::operator=(const Session &other) {
+Session& Session::operator=(Session &other) {
     // check for self assignment
     if (this == &other)
         return  *this;
     // first destroy old resources
     deleteSessResources();
     // copy resources of other
-    CopySessResources(other);
+    copySessResources(other);
     return *this;
 }
 //  move assignment
@@ -62,12 +51,12 @@ Session& Session::operator=(Session &&other) {
     // first destroy old resources
     deleteSessResources();
     // copy resources of other
-    CopySessResources(other);
+    stealSessResources(other);
     // delete the references of other
     other.content.clear();
     other.actionsLog.clear();
     other.userMap.clear();
-    other.activeUser = nullptr;;
+    other.activeUser = nullptr;
     return *this;
 }
 
@@ -75,14 +64,17 @@ void Session::deleteSessResources() {
     for (const pair<const basic_string<char>, User *>& currUserPair : userMap){
         delete currUserPair.second;
     }
+    userMap.clear();
     for(Watchable* currContent : content)
         delete currContent;
+    content.clear();
     for(BaseAction* currAction : actionsLog)
         delete currAction;
+    actionsLog.clear();
     userInputVector.clear();
 }
 // copy others references
-void Session::CopySessResources(const Session &other) {
+void Session::stealSessResources(const Session &other) {
     for(Watchable* currContent : other.content)
         content.push_back(currContent);
     for(BaseAction* currAction : other.actionsLog)
@@ -90,8 +82,18 @@ void Session::CopySessResources(const Session &other) {
     for (const pair<const basic_string<char>, User *>& currUserPair : other.userMap)
         userMap.insert(make_pair(currUserPair.first,currUserPair.second));
     activeUser = other.activeUser;
-}
+    // clear other pointers
 
+}
+void Session::copySessResources(const Session &other) {
+    for(Watchable* currContent : other.content)
+        content.push_back(currContent->clone());
+    for(BaseAction* currAction : other.actionsLog)
+        actionsLog.push_back(currAction->clone());
+    for (pair<const basic_string<char>, User *> currUserPair : other.userMap)
+        userMap.insert(make_pair(currUserPair.first,currUserPair.second->clone(*this)));
+    activeUser = userMap.at(other.getActiveUser()->getName());
+}
 
 void Session::start() {
     cout << "SPLFLIX is now on!" << endl;
@@ -134,6 +136,7 @@ void Session::start() {
             else if(userInputVector[0] == "watch") {
                 Watch *WatchAction = new Watch();
                 WatchAction->act(*this);
+                // delete the extra watch action that does not goes to the actionLog
                 delete WatchAction;
             }
             else{

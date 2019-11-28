@@ -16,7 +16,7 @@ public:
     Session(const std::string &configFilePath);
     Session(const Session& other); // copy constructor
     ~Session(); // destructor
-    Session& operator=(const Session& other);  // copy assignment
+    Session& operator=(Session& other);  // copy assignment
     Session& operator=( Session&& other); //  move assignment
     Session(Session&& other); // move constructor
 
@@ -45,6 +45,8 @@ private:
     void insertSeries (json& jsonFile);
     std::vector<std::string> userInputVector;
     void deleteSessResources();
-    void CopySessResources(const Session &other);
+    void stealSessResources(const Session &other);
+    void copySessResources(const Session &other);
+
 };
 #endif

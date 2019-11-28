@@ -229,9 +229,9 @@ void PrintWatchHistory::act(Session &sess) {
             int firstSpace = tempName.find(' ');
             cout << i << ". " << tempName.substr(firstSpace + 1) << endl;
             i++;
-            complete();
         }
     }
+    complete();
     // add the action to the actions log
     sess.addActionLog(*this);
 }

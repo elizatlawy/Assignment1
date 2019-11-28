@@ -6,13 +6,6 @@
 using namespace std;
 
 int main(int argc, char** argv){
-//    vector<string> tags = {"tag1", "tag2"};
-//    Episode* ep1 = new Episode(1,"name",10,1,1,tags);
-//    cout << ep1->toString();
-//    Episode* ep2 = ep1;
-//    delete ep1;
-//    cout << ep2->toString();
-
 	if(argc!=2)
 	{
 		cout << "usage splflix input_file" << endl;
@@ -20,12 +13,30 @@ int main(int argc, char** argv){
 	}
     Session* s = new Session(argv[1]);
     s->start();
-    Session* s3 = new Session(argv[1]);
-    Session s2 = *s; // copy constructor
+    Session s2 = *s;
     delete(s);
     s2.start();
+
+    return 0;
+}
+
+void test(int argc, char** argv){
+    Session s =  Session(argv[1]);
+    s.start();
+//    Session* s3 = new Session(argv[1]);
+    //Session* s2 = s; // copy constructor - - works!
+    //Session s3(std::move(s2)); // move constructor - works!
+    Session s3 =  Session(argv[1]);
+    s3.start();
+    //s3 = std::move(s); // move assignment
+    s3 = s; // copy assignment
+    s3.start();
+    //delete(s2);
+//    delete (s3);
+    //delete(s2);
+    //   s2.start();
 //    s2.start();
-//    s3 = std::move(&s2);
+
 //    s3->start();
 //    delete (s3);
 
@@ -36,7 +47,7 @@ int main(int argc, char** argv){
 //    Session s3 = *s; // copy constructor
 //    delete(s);
 //    s3.start();
-    return 0;
+
 }
 
 
