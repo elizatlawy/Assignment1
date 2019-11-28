@@ -13,38 +13,13 @@ User::User(const string& name) : history(), name(name){}
 User::User(const User &other): history(), name(other.name){
     copyHistory(other);
 }
-// move constructor
-User::User(User &&other): history(other.history), name(other.name){
-//    name = other.name;
-//    history = other.history;
-    other.history.clear();
-}
 // destructor
 User::~User() {
     // clear all history pointers
     history.clear();
 
 }
-// copy assignment
-User &User::operator=(const User &other) {
-    // if try copy this just return this
-    if(this == &other)
-        return *this;
-    // first destroy old history
-    history.clear();
-    name = other.name;
-    copyHistory(other);
-    return *this;
-}
-//  move assignment
-User &User::operator=(User &&other) {
-    // first destroy old history
-    history.clear();
-    copyHistory(other);
-    // delete other history
-    other.history.clear();
-    return *this;
-}
+
 // getters
 string User::getName() const {
     return name;

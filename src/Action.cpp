@@ -262,6 +262,7 @@ void Watch::act(Session &sess) {
             int firstSpace = tempName.find(' ');
             cout << "Watching " << tempName.substr(firstSpace+1) << endl;
             // add to history
+            //sess.getActiveUser()->get_history().push_back(sess.getContent()[WatchableID-1]);
             sess.addToCurrentUserHistory(WatchableID-1);
             // recommend to the user what to see next
             Watchable *nextRecommendation = sess.getActiveUser()->get_history()[sess.getActiveUser()->get_history().size() - 1]->getNextWatchable(sess);
@@ -278,7 +279,6 @@ void Watch::act(Session &sess) {
             complete();
             WatchableID = nextRecommendation->getId();
             // TODO: there is memory leak here!
-            //delete nextRecommendation;
             getline(cin,isAgreed);
             }
         }

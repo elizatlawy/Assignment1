@@ -22,14 +22,14 @@ int Watchable::getLength() const {
 const vector<std::string> &Watchable::getTags() const {
     return tags;
 }
-
-bool Watchable::operator==(const Watchable &rhs) const {
-    return id == rhs.id;
-}
-
-bool Watchable::operator!=(const Watchable &rhs) const {
-    return id != rhs.id;
-}
+//
+//bool Watchable::operator==(const Watchable &rhs) const {
+//    return id == rhs.id;
+//}
+//
+//bool Watchable::operator!=(const Watchable &rhs) const {
+//    return id != rhs.id;
+//}
 
 /*
  *  ###################################### Movie  ####################################
