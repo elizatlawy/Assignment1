@@ -84,7 +84,6 @@ void Session::deleteSessResources() {
     userInputVector.clear();
 }
 
-// copy others references
 void Session::stealSessResources(const Session &other) {
     for (Watchable *currContent : other.content)
         content.push_back(currContent);
@@ -93,8 +92,6 @@ void Session::stealSessResources(const Session &other) {
     for (const pair<const basic_string<char>, User *> &currUserPair : other.userMap)
         userMap.insert(make_pair(currUserPair.first, currUserPair.second));
     activeUser = other.activeUser;
-    // clear other pointers
-
 }
 
 void Session::copySessResources(const Session &other) {
