@@ -24,14 +24,19 @@ Session::Session(const string &configFilePath) : content(), actionsLog(), userMa
 
 // copy constructor
 Session::Session(const Session &other) : content(), actionsLog(), userMap(), activeUser(), userInputVector() {
+	// copy resources of other
     copySessResources(other);
 }
 
 //move constructor
 Session::Session(Session &&other) : content(), actionsLog(), userMap(), activeUser(), userInputVector() {
-    // copy resources of other
+    // steal resources of other
     stealSessResources(other);
     // delete the references of other
+    other.content.clear();
+    other.actionsLog.clear();
+    other.userMap.clear();
+    other.activeUser = nullptr;
 }
 
 // destructor
@@ -44,7 +49,7 @@ Session &Session::operator=(Session &other) {
     // check for self assignment
     if (this == &other)
         return *this;
-    // first destroy old resources
+    // first delete old resources
     deleteSessResources();
     // copy resources of other
     copySessResources(other);
@@ -53,9 +58,9 @@ Session &Session::operator=(Session &other) {
 
 //  move assignment
 Session &Session::operator=(Session &&other) {
-    // first destroy old resources
+    // first delete old resources
     deleteSessResources();
-    // copy resources of other
+    // steal resources of other
     stealSessResources(other);
     // delete the references of other
     other.content.clear();
