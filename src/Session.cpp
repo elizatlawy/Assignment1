@@ -45,7 +45,7 @@ Session::~Session() {
 }
 
 // copy assignment
-Session &Session::operator=(Session &other) {
+Session &Session::operator=(const Session &other) {
     // check for self assignment
     if (this == &other)
         return *this;

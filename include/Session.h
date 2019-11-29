@@ -19,7 +19,7 @@ public:
 
     Session(const Session &other); // copy constructor
     ~Session(); // destructor
-    Session &operator=(Session &other);  // copy assignment
+    Session &operator=(const Session &other);  // copy assignment
     Session &operator=(Session &&other); //  move assignment
     Session(Session &&other); // move constructor
 
