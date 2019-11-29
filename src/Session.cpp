@@ -107,6 +107,7 @@ void Session::start() {
     string lastUserInput;
     getline(cin, lastUserInput);
     while (lastUserInput != "exit") {
+        // split the lastUserInput into vector by words
         std::istringstream iss(lastUserInput);
         std::vector<std::string> results(std::istream_iterator<std::string>{iss},
                                          std::istream_iterator<std::string>());
@@ -181,7 +182,7 @@ void Session::setActiveUser(User &activeUser) {
 }
 
 void Session::addActionLog(BaseAction &newAction) {
-    actionsLog.push_back(&newAction);
+    Session::actionsLog.push_back(&newAction);
 }
 
 void Session::addToCurrentUserHistory(int id) {

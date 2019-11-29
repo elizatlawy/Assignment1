@@ -51,12 +51,12 @@ void User::setName(const string &name) {
  */
 LengthRecommenderUser::LengthRecommenderUser(const string &name) : User(name) {} // constructor
 User *LengthRecommenderUser::clone(const Session &s) {
-    LengthRecommenderUser *toReturn = new LengthRecommenderUser(this->getName());
+    LengthRecommenderUser *newUser = new LengthRecommenderUser(this->getName());
     for (int i = 0; i < (signed) this->history.size(); i++) {
         int currWatchableID = history[i]->getId();
-        toReturn->history.push_back(s.getContent()[currWatchableID - 1]);
+        newUser->history.push_back(s.getContent()[currWatchableID - 1]);
     }
-    return toReturn;
+    return newUser;
 }
 
 Watchable *LengthRecommenderUser::getRecommendation(Session &s) {
@@ -90,13 +90,13 @@ Watchable *LengthRecommenderUser::getRecommendation(Session &s) {
 RerunRecommenderUser::RerunRecommenderUser(const string &name) : User(name), lastRecommandedIndex(0) {} // constructor
 
 User *RerunRecommenderUser::clone(const Session &s) {
-    auto *toReturn = new RerunRecommenderUser(this->getName());
+    auto *newUser = new RerunRecommenderUser(this->getName());
     for (int i = 0; i < (signed) this->history.size(); i++) {
         int currWatchableID = history[i]->getId();
-        toReturn->history.push_back(s.getContent()[currWatchableID - 1]);
+        newUser->history.push_back(s.getContent()[currWatchableID - 1]);
     }
-    toReturn->lastRecommandedIndex = this->lastRecommandedIndex;
-    return toReturn;
+    newUser->lastRecommandedIndex = this->lastRecommandedIndex;
+    return newUser;
 }
 
 Watchable *RerunRecommenderUser::getRecommendation(Session &s) {
@@ -112,12 +112,12 @@ Watchable *RerunRecommenderUser::getRecommendation(Session &s) {
 GenreRecommenderUser::GenreRecommenderUser(const string &name) : User(name) {}
 
 User *GenreRecommenderUser::clone(const Session &s) {
-    auto *toReturn = new GenreRecommenderUser(this->getName());
-    for (int i = 0; i < (signed) this->history.size(); i++) {
+    auto *newUser = new GenreRecommenderUser(this->getName());
+    for (int i = 0; i < (unsigned) this->history.size(); i++) {
         int currWatchableID = history[i]->getId();
-        toReturn->history.push_back(s.getContent()[currWatchableID - 1]);
+        newUser->history.push_back(s.getContent()[currWatchableID - 1]);
     }
-    return toReturn;
+    return newUser;
 }
 
 Watchable *GenreRecommenderUser::getRecommendation(Session &s) {
@@ -137,7 +137,7 @@ Watchable *GenreRecommenderUser::getRecommendation(Session &s) {
                 string currTag = j->getTags()[k];
                 if (tagsVector[i].first == currTag) {
                     auto itr = std::find(history.begin(), history.end(), j);
-                    if (itr == history.cend()) { //watchable* is not found
+                    if (itr == history.cend()) { // if watchable* is not found in History -> return it
                         nextRecommendation = j;
                     }
                 }
@@ -166,10 +166,10 @@ vector<pair<string, int>> GenreRecommenderUser::createVectorTags(Session &s) {
 
 vector<pair<string, int>> GenreRecommenderUser::sortVectorTags(vector<pair<string, int>> tagsVector) {
     std::sort(tagsVector.begin(), tagsVector.end(), [](const pair<string, int> &x, const pair<string, int> &y) {
-        // compare second value
+        // compare second value by decreasing order
         if (x.second != y.second)
             return x.second > y.second;
-            // compare first only if second value is equal
+            // compare first by lexicographic order, only if second value is equal
         else
             return x.first < y.first;
     });

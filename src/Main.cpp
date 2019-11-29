@@ -15,7 +15,6 @@ int main(int argc, char **argv) {
     Session s2 = *s;
     delete (s);
     s2.start();
-
     return 0;
 }
 

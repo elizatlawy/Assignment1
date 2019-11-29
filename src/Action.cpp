@@ -122,7 +122,7 @@ void ChangeActiveUser::act(Session &sess) {
         sess.setActiveUser(*sess.getUserMap().at(userNameToChange));
         complete();
     }
-        // if the user does not exist in UserMap
+    // if the user does not exist in UserMap
     else {
         error("the user you have entered does not exist");
         cout << toString() << endl;
@@ -151,7 +151,7 @@ void DeleteUser::act(Session &sess) {
         sess.removeUser(userNameToDelete);
         complete();
     }
-        // if the user does not exist in UserMap
+    // if the user does not exist in UserMap
     else {
         error("the user you have entered does not exist");
         cout << toString() << endl;
@@ -289,7 +289,7 @@ void Watch::act(Session &sess) {
                 cout << "Sorry, we do not have any recommendation for you" << endl;
                 break;
             }
-                // have recommendation for the user
+            // have recommendation for the user
             else {
                 firstSpace = nextRecommendation->shortToString().find(' ');
                 cout << "We recommend watching " << nextRecommendation->shortToString().substr(firstSpace + 1)

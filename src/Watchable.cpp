@@ -73,7 +73,7 @@ Watchable *Movie::getNextWatchable(Session &sess) const {
 // constructor
 Episode::Episode(long id, const string &seriesName, int length, int season, int episode, const vector<string> &tags)
         : Watchable(id, length, tags),
-          seriesName(seriesName), season(season), episode(episode), nextEpisodeId((long) (id + 1)) {}
+          seriesName(seriesName), season(season), episode(episode), nextEpisodeId(id + 1) {}
 
 Watchable *Episode::clone() {
     Episode *newEpisode = new Episode(getId(), seriesName, getLength(), season, episode, getTags());
