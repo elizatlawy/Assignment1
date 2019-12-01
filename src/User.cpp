@@ -113,7 +113,7 @@ GenreRecommenderUser::GenreRecommenderUser(const string &name) : User(name) {}
 
 User *GenreRecommenderUser::clone(const Session &s) {
     auto *newUser = new GenreRecommenderUser(this->getName());
-    for (int i = 0; i < (unsigned) this->history.size(); i++) {
+    for (int i = 0; i < (signed) this->history.size(); i++) {
         int currWatchableID = history[i]->getId();
         newUser->history.push_back(s.getContent()[currWatchableID - 1]);
     }
